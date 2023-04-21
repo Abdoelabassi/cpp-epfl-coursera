@@ -17,28 +17,24 @@ int main()
 
   /*******************************************
    * Completez le programme a partir d'ici.
-   *******************************************/
-    int i(2);
+   */
+   while(debut <= fin){
+     int n = debut;
+     int n_rep = 0;
+     while(n != 0){
+       if(n%3 == 0){
+         n += 4;
+       }else if(n%4 == 0){
+         n /=2;
+       }else{
+         n -= 1;
+       }
+       n_rep++;
+     }
+     cout << debut << "->" << n_rep << endl;
+     debut++;
+   }
 
-    while(i >= debut && i <= fin){
-      if (i % 3 == 0){
-        i += 4;
-      }
-      else if (i % 4 == 0){
-        i /= 2;
-      }
-      else{
-        i--;
-      }
-
-      if (i == 0){
-        break;
-      }
-
-      i++;
-
-      cout << i << "->" << debut << endl;
-    }
 
   /*******************************************
    * Ne rien modifier apres cette ligne.
