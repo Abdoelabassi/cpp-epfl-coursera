@@ -33,6 +33,26 @@ void dire_chiffre(int& nombre, int repetitions_chiffre, int chiffre)
 
 int lire_et_dire(int nombre)
 {
+    int chiffre_droite = nombre;
+    int chiffre_gauche = separer_chiffre_gauche(chiffre_droite);
+    int rep(1);
+    int nombre_final(0);
+
+    while(chiffre_gauche != 0){
+        int pchiffre_gauche = separer_chiffre_gauche(chiffre_droite);
+
+        if(chiffre_gauche == pchiffre_gauche){
+            rep +=1;
+        }else{
+            dire_chiffre(nombre_final,rep,chiffre_gauche);
+            rep = 1;
+        }
+
+        chiffre_gauche = pchiffre_gauche;
+    }
+
+    return nombre_final;
+
 }
 
 /*******************************************
