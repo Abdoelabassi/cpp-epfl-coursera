@@ -19,19 +19,19 @@ int demander_annee(){
 void affiche_date(int annee, int nombre){
     if(nombre >= 22 && nombre <=56){
         if(nombre <= 31){
-            cout << "Date de Paques en " << annee << " : ";
+            cout << "Date de Paques en " << annee << ": ";
             cout << nombre << " mars ";
         }else if(nombre >= 32){
             int nombre_jour = nombre;
             nombre_jour -= 31;
-            cout << "Date de Paques en " << annee << " : ";
+            cout << "Date de Paques en " << annee << ": ";
             cout << nombre_jour << " avril ";
         }
     }
 
 }
 
-int date_paques(int annee){
+int date_Paques(int annee){
     
     int siecle = annee/100;
     int p = (13 + 8*siecle)/25;
@@ -60,10 +60,10 @@ int main(){
     int b(0);
 
     a = demander_annee();
-    b = date_paques(a);
+    b = date_Paques(a);
     affiche_date(a,b);
 
-    
+
 
 
 
