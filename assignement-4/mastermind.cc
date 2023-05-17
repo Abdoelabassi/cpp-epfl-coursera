@@ -169,12 +169,35 @@ void afficher_reponses(char c1, char c2, char c3, char c4,
 bool gagne(char c1, char c2, char c3, char c4,
            char r1, char r2, char r3, char r4)
 {
+  return ((c1==r1) && (c2==r2) && (c3==r3) && (c4==r4) );
 }
 
 // ======================================================================
-void jouer(// A remplir
-          )
+void jouer(int maxCoup = 8)
 {
+  char r1(tirer_couleur());
+  char r2(tirer_couleur());
+  char r3(tirer_couleur());
+  char r4(tirer_couleur());
+  char c1('u'),  c2('u'), c3('u'), c4('u');
+
+  int minCoup(0);
+  do{
+    c1 = lire_couleur();
+    c2 = lire_couleur();
+    c3 = lire_couleur();
+    c4 = lire_couleur();
+
+    afficher_coup(c1,c2,c3,c4,r1,r2,r3,r4);
+
+    minCoup++;
+  }while(!gagne(c1,c2,c3,c4,r1,r2,r3,r4) && minCoup < maxCoup);
+
+  if(gagne(c1,c2,c3,c4,r1,r2,r3,r4)){
+    message_gagne(minCoup);
+  }else{
+    message_perdu(r1,r2,r3,r4);
+  }
 }
 
 /*******************************************
