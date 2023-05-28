@@ -32,23 +32,27 @@ void ecart_a_moyenne(double avg, vector<double> points)
 int main()
 {
 
-    vector<double> tab(4,0);
+    vector<double> notes;
+
+    double note(0);
+
+    do{
+        cout << "Entrez la note de l'eleve " << notes.size() + 1 << " : " << endl;
+        cin >> note;
+        if(note >= 0.0){
+            notes.push_back(note);
+        }
+    }while(note >= 0.0);
 
 
-    int i(1);
-
-    for(auto &elv: tab){
-        cout << "Entrez la note de l'eleve  " << i << " : ";
-        cin >> elv;
-        cout << endl;
-        i++;
-    }
 
 
-    double avg = moyenne(tab);
+    
+
+    double avg = moyenne(notes);
     cout << "Moyenne de classe: " << avg << endl;
 
-    ecart_a_moyenne(avg, tab);
+    ecart_a_moyenne(avg, notes);
 
 
 
