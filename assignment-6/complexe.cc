@@ -53,14 +53,14 @@ Complexe multiplication(Complexe &z1, Complexe &z2)
 
 }
 
-// division de deux nombres complexe: z = (x+iy)\(x'+iy') = x\x' +x\iy' + iy\x' + y\y'
+// division de deux nombres complexe: z = ((x*x'+y*y')/(x'*x'+y'*y'), (y*x'-x*y')/(x'*x'+y'*y')).
 
 Complexe division(Complexe& z1, Complexe&z2)
 {
     Complexe p;
 
-    p.x = z1.x/z2.x + z1.y/z2.y;
-    p.y = z1.x/z2.y + z1.y/z2.x;
+    p.x = (z1.x*z2.x + z1.y*z2.y) / (z1.x*z2.x + z1.y*z2.y);
+    p.y = (z1.y*z2.x - z1.x*z2.y) / (z2.x*z2.x + z2.y*z2.y);
 
     return p;
 }
@@ -74,13 +74,18 @@ int main()
     affiche(z1);
     affiche(z2);
     Complexe p(addition(z1,z2));
-    cout << "La somme de z1 et z2: " << "\nPartie realle: "  << p.x << "\n Partie imaginaire: " << p.y << endl;
+    cout << "(" << z1.x <<","  << z1.y << ") + " << "(" << z2.x << "," << z2.y << ") = " << "(" << p.x << "," << p.y << ")" <<endl;
+
     p = soustraction(z1, z2);
-    cout << "Soustraction de z1, z2 " << "\n Partie reelle: " << p.x << "\n Partie imaginaire: " << p.y << endl;
+    cout << "(" << z1.x <<","  << z1.y << ") - " << "(" << z2.x << "," << z2.y << ") = " << "(" << p.x << "," << p.y << ")" <<endl;
+
     p = multiplication(z1, z2);
-    cout << "Multiplication de z1, z2 " << "\n Partie reelle: " << p.x << "\n Partie imaginaire: " << p.y << endl;
+    cout << "(" << z1.x <<","  << z1.y << ") * " << "(" << z2.x << "," << z2.y << ") = " << "(" << p.x << "," << p.y << ")" <<endl;
+
     p = division(z1, z2);
-    cout << "Division de z1, z2 " << "\n Partie reelle: " << p.x << "\n Partie imaginaire: " << p.y << endl;
+    cout << "(" << z1.x <<","  << z1.y << ") / " << "(" << z2.x << "," << z2.y << ") = " << "(" << p.x << "," << p.y << ")" <<endl;
+
+
 
 
 
