@@ -48,17 +48,17 @@ string code(string &chaine, int d)
     return coder;
 }
 
+string decode(string &chaine, int decalage)
+{
+    string decoder = code(chaine,  -decalage);
+
+    return decoder;
+}
+
 int main()
 {
 
-    string show("Fuyez manants");
-    int decalage = 6;
-
-    string cipher = code(show, decalage);
-
-    cout << "original: " << show << "\n" << "coder: " << cipher << endl;
-
-
+    
 
 
 
