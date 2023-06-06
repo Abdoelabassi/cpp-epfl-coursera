@@ -1,8 +1,12 @@
 #include <iostream>
 #include <string>
 
-
 using namespace std;
+
+char decale(char &c, char &debut, int decalage);
+char code(char &c, int d);
+string code(string &chaine, int d);
+string decode(string &chaine, int decalage);
 
 // function decalage
 char decale(char &c, char &debut, int decalage)
