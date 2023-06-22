@@ -14,13 +14,13 @@ struct Maison {
 struct Personne {
 
     string nom;
-    Maison& masion;
+    Maison* masion;
 
 };
 
 void affiche(const Personne& p){
 
-    cout << p.nom << " habite " << p.masion.addresse << endl;
+    cout << p.nom << " habite " << (*(p.masion)).addresse << endl;
 
     
 
@@ -35,8 +35,8 @@ int main()
     Maison m1 = {"104 bulvard Fes"};
     Maison m2 = {"192 avenue Ouad EL Makahzine"};
 
-    Personne jefferson = {"Jefferson", m1};
-    Personne katie = {"Katie", m2};
+    Personne jefferson = {"Jefferson", &m1};
+    Personne katie = {"Katie", &m2};
 
     affiche(jefferson); affiche(katie);
 
