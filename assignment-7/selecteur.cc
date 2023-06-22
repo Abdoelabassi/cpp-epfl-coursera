@@ -1,22 +1,56 @@
 #include <iostream>
+#include <string>
+
 
 using namespace std;
 
-double* selecteur(){
 
-     double valeur1(0), valeur2(0), valeur3(0);
+ 
 
-    double* choix(&valeur1);
+
+int demander_nombre(int a, int b){
+
+    if(a > b ){int tmp(b); b=a;a=tmp;}
+
+    int res(0);
 
     do{
-        cout << "Entrez une valeur entre 1 et 3: ";
-        cin >> *choix;
-        cout << endl;
-        cout << "Vous avez choisez: " << *choix << endl;
+        cout << "Entrez une valeur entre " << a << " et " << b  << " : ";
+        cin >> res;
+    }while( (res < a) or (res > b) );
 
-    }while(*choix <= 1 or *choix >= 3 );
+    return res;
+}
 
-    return choix;
+
+
+void selecteur(){
+
+    double valeur1(1.89), valeur2(-2.36474), valeur3(3.73736);
+
+    double* choix(nullptr);
+
+    switch (demander_nombre(1,3))
+    {
+    case 1 :
+        choix = &valeur1;
+        break;
+    
+    case 2:
+        choix = &valeur2;
+        break;
+
+    case 3:
+        choix = &valeur3;
+        break;
+    }
+
+
+    cout << "vous avez choisi " << *choix << endl;
+
+
+
+   
 }
 
 
@@ -25,6 +59,13 @@ double* selecteur(){
 
 int main()
 {
+
+    selecteur();
+
+
+    
+
+
 
    
 
