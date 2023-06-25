@@ -98,6 +98,79 @@ void demande_de_joue(Grille &grille, Coleur coleur){
 }
 
 
+unsigned int compte(Grille &grille, Coleur couleur, size_t ligne_depart, size_t colone_depart, int dir_ligne, int dir_colonne){
+
+    unsigned int compteur(0);
+
+    size_t ligne(ligne_depart);
+    size_t colonne(colone_depart);
+
+    while(grille[ligne][colonne] == grille[ligne][colonne] ){
+
+        ++compteur;
+
+        ligne += dir_ligne;
+        colonne += dir_colonne;
+    }
+
+
+    return compteur;
+}
+
+
+
+bool est_ce_gangne(Grille &grille, Coleur couleur){
+
+    
+
+    for(size_t ligne(0); ligne < grille.size(); ++ligne ){
+        for (size_t col(0); col < grille[ligne].size(); ++col){
+
+            Coleur couleur_case(grille[ligne][col]);
+
+            if (couleur_case == couleur){
+
+            const size_t ligne_max(grille.size() - 4 );
+            const size_t col_max(grille[ligne].size() - 4 );
+
+            if(// en diagonale vers le haut et la droite
+                (ligne >= 3 and col <= col_max and
+                compte(grille, couleur, ligne, col,-1, +1 ) >= 4) or
+
+              //horizontale vers la droite
+                (col <= col_max and 
+                compte(grille, couleur, ligne , col,0, +1) >= 4) or
+
+              //en diagonale vers la bas a la droite
+                ( ligne <= ligne_max and col <= col_max and 
+                compte(grille, couleur, ligne, col,+1,+1) >= 4 )  or
+
+              //verticalement verse le bas
+                (ligne <= ligne_max and
+                compte(grille, couleur, ligne, col,+1, 0) >= 4)){
+                    return true;
+                }
+            }
+
+        }
+    }
+
+
+    return false;
+}
+
+bool plein(const Grille &grille){
+
+    for(auto kase: grille[0]){
+        if(kase == vide){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 
 
 int main(){
@@ -107,6 +180,34 @@ int main(){
     initilise(grille);
     affiche(grille);
     Coleur coleur(jaune);
+
+    bool gagne;
+
+    do{
+        demande_de_joue(grille, coleur);
+        affiche(grille);
+
+        gagne = est_ce_gangne(grille, coleur);
+
+        if(coleur == jaune){
+            coleur = rouge;
+        }else{
+            coleur = jaune;
+        }
+    }while(not gagne and not plein(grille));
+
+    if (gagne) {
+  // attention, on a change la couleur pour la couleur de l'autre joueur !
+    cout << "Le joueur ";
+    if (coleur == jaune) {
+      cout << 'O';
+    } else {
+      cout << 'X';
+    }
+    cout << " a gagne' !" << endl;
+  } else {
+    cout << "Match nul !" << endl;
+  }
 
  
 
