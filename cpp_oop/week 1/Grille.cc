@@ -42,7 +42,13 @@ void affiche(Grille const &grille){
     cout << endl << endl;
 }
 
-void joue(Grille& grille, int colonne, Coleur coleur){
+bool joue(Grille& grille, int colonne, Coleur coleur){
+
+    // si le numero de colonne n'est pas valide. le coup n'est pas valide
+    if(colonne >= grille[0].size()){
+        return false;
+    }
+
 
     // en parcourt le colonne en partent du bas
     size_t ligne = grille.size() - 1;
@@ -57,7 +63,38 @@ void joue(Grille& grille, int colonne, Coleur coleur){
         }
     }
 
-    grille[ligne][colonne] = coleur;
+    // si on'est pas a arrivee jusau'en haut de la colonne, one remplit la case vide trouvee
+    // sinon c'est que la colonne est plaine, et le coup ne'est pas valide
+    if (not pleine){
+        grille[ligne][colonne] = coleur;
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void demande_de_joue(Grille &grille, Coleur coleur){
+
+
+
+    bool valide;
+    if(coleur == jaune){
+            cout << "Joueur X: " << " Entrez un numero de colonne " << endl;
+        }else{
+            cout << "Joueur O: " << " Entrez un numero de colonne" << endl;
+        }
+
+        do{
+        size_t colonne;
+        cin >> colonne;
+        --colonne;
+
+        valide = joue(grille, colonne, coleur);
+        if(not valide){
+            cout << "> Ce coup n'est pas valide " << endl;
+        }
+
+        }while(not valide);
 }
 
 
@@ -69,9 +106,11 @@ int main(){
 
     initilise(grille);
     affiche(grille);
+    Coleur coleur(jaune);
 
-    joue(grille, 2, rouge);
-    affiche(grille);
+ 
+
+   
 
 
 
