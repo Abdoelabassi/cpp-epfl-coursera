@@ -68,7 +68,7 @@ class Magician{
         void calculer(unsigned int resultat);
         void announcer();
 
-        unsigned int arge_devine;
+        unsigned int age_devine;
         unsigned int argent_devine;
 
 };
@@ -88,6 +88,9 @@ int main(){
 
     Magician Dambeldor;
     Assistance Harry;
+
+    Dambeldor.tour_de_magie(Harry, jk_rowling);
+
 
 
    
@@ -151,13 +154,13 @@ void Magician::tour_de_magie(Assistance &ass, Spectateur &sp){
 void Magician::calculer(unsigned int resultat_recu){
     resultat_recu += 115;
 
-    arge_devine = resultat_recu / 100;
-    arge_devine = resultat_recu % 100;
+    age_devine = resultat_recu / 100;
+    argent_devine = resultat_recu % 100;
 }
 
 void Magician::announcer(){
     cout << "[Magician]" << endl;
 
-    cout << "Hmm ..." << "Je vois que vous etes " << arge_devine << " ans" << endl;
-    cout << "Et que vous avez " << arge_devine << "franc en poche" << endl;
+    cout << "Hmm ..." << "Je vois que vous etes " << age_devine << " ans" << endl;
+    cout << "Et que vous avez " << argent_devine << " francs en poche" << endl;
 }
