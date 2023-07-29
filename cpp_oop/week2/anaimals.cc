@@ -16,6 +16,21 @@ class Peluche {
 				std::cout << "[un Peluche est fabriquee]" << std::endl;
 			}
 
+		// constructeur copie
+
+		Peluche(Peluche const& p)
+		: espace(p.espace), name(p.name + "-copie"), prix(p.prix)
+		
+		{
+			std::cout << "[Une Peluche est ete copie]" << std::endl;
+			std::cout << "La Peluche " << p.name << " a ete copiee en " << name << std::endl;
+
+		}
+		~Peluche()
+		{
+			std::cout << "La Peluche " << name <<  " test cassee " << std::endl;
+		}
+
 
 		std::string getName()const{return name;}
 		std::string getEspece()const{return espace;}
@@ -35,10 +50,12 @@ class Peluche {
 
 int main(){
 
-	Peluche p("barbie", "rocket", 3.99);
+	Peluche p("barbie", "rocket", 3.99), p2(p);
+
 
 	std::cout << "Etiquette :" << std::endl;
 	p.etiquette(p);
+	p2.etiquette(p2);
 
 
 
