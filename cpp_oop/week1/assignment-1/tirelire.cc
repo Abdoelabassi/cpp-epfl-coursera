@@ -39,10 +39,22 @@ class Tirelire{
         }
 
         void puiser(double amount){
-          if(amount > amount){
+          if(amount > montant){
             vider();
           }
           this->montant -= amount;
+        }
+
+        bool montant_suffisant(double budget, double &solde){
+
+          if(montant > budget){
+            solde = montant - budget;
+            return true;
+          }else{
+            solde = budget - montant;
+            return false;
+          }
+
         }
 
 

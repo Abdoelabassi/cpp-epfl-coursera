@@ -108,7 +108,7 @@ bool verifier(char coleur, char& secondColor, int& score)
   if(coleur == secondColor){
     verify = true;
     score++;
-    secondColor='u'; // set it to a char, that not in color list
+    secondColor='W'; // set it to a char, that not in color list
   }
 
   return verify;
