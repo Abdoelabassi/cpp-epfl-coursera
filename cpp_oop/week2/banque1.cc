@@ -1,16 +1,11 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 
 // global vars 
-struct Interet{
-
-  double interet1;
-  double interet2;
-          
-
-};
+typedef std::vector<double> Taux;
 
 
 
@@ -121,14 +116,16 @@ class Billet{
         
 
         // Cette fonction ajoute les intérêts au solde d'un compte
-        Interet bouclerCompte(Compte &compte, Billet &taux) {
+        Taux bouclerCompte(Compte &compte, Billet &taux) {
 
-                Interet Int;
+                Taux Int;
                 
-                Int.interet1 = taux.getPTaux() * compte.getSoldePrive();
-                Int.interet1 += compte.getSoldePrive();
-                Int.interet2 = taux.getDTaux()* compte.getSoldeEparagne();
-                Int.interet2 += compte.getSoldeEparagne();
+                double interet1 = taux.getPTaux() * compte.getSoldePrive();
+                interet1 += compte.getSoldePrive();
+                Int.push_back(interet1);
+                double interet2 = taux.getDTaux()* compte.getSoldeEparagne();
+                interet2 += compte.getSoldeEparagne();
+                Int.push_back(interet2);
                 return Int;
                 
         }
@@ -152,7 +149,7 @@ int main()
   // Données pour tous les comptes d'épargne (taux d'intérêt) :
   double taux2(0.02);
 
-  Billet Taux(0.01, 0.02);
+  Billet Taxes(0.01, 0.02);
   // Données pour le premier client (nom et ville) :
   Client client1("Pedro", "Geneve");
   // Données pour le compte privé du premier client (solde) :
@@ -171,15 +168,15 @@ int main()
   client2.afficherClient(compte2.getSoldePrive(), compte2.getSoldeEparagne());
 
   // Bouclement du compte privé et epargne du premier client:
-  Interet soldePremierClient = Taux.bouclerCompte(compte1, Taux);
+  Taux soldePremierClient = Taxes.bouclerCompte(compte1, Taxes);
   // Bouclement du compte privé et epargne du deuxième client:
-  Interet soldeDeuxiemeClient = Taux.bouclerCompte(compte2, Taux);
+  Taux soldeDeuxiemeClient = Taxes.bouclerCompte(compte2, Taxes);
 
   cout << "Données apres le bouclement des comptes :" << endl;
   // Afficher les données du premier client:
-  client1.afficherClient(compte1.getSoldePrive(), compte1.getSoldeEparagne());
+  client1.afficherClient(soldePremierClient[0], soldePremierClient[1]);
   // Afficher les données du deuxième client:
-  client2.afficherClient(compte2.getSoldePrive(), compte2.getSoldeEparagne());
+  client2.afficherClient(soldeDeuxiemeClient[0], soldeDeuxiemeClient[1]);
 
   return 0;
 }
