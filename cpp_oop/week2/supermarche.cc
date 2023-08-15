@@ -1,8 +1,63 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 // ======================================================================
+
+class Article{
+
+  private:
+    string name;
+    double prix;
+    bool isSolde;
+
+  public:
+      Article(string name, double prix, bool isSolde)
+        : name(name), prix(prix), isSolde(isSolde)
+        {
+          cout << "Article cree " << endl;
+        }
+      ~Article();
+
+      string getName(){return name;}
+      double getPrix(){return prix;}
+      bool isSolde(){return isSolde;}
+
+};
+
+class Achat{
+  private:
+    Article article;
+    double quantite;
+
+  public:
+    Achat(Article article, double quantite)
+      : article(article), quantite(quantite)
+      {
+
+      }
+
+    ~Achat();
+
+    void afficher(){
+      cout << article.getName() << " : " <<  article.getPrix() << " x " << quantite << " = " << article.getPrix()*quantite  << " Frs (en action) " << endl;
+    }
+
+
+};
+
+class Caddie{
+
+  private:
+    vector<Achat> achats;
+
+  public:
+    Caddie();
+
+};
+
+
 int main()
 {
   // Les articles vendus dans le supermarché
