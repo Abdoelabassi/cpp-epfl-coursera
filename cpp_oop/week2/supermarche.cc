@@ -7,53 +7,101 @@ using namespace std;
 
 class Article{
 
-  private:
-    string name;
-    double prix;
-    bool isSolde;
 
   public:
-      Article(string name, double prix, bool isSolde)
-        : name(name), prix(prix), isSolde(isSolde)
-        {
-          cout << "Article cree " << endl;
-        }
-      ~Article();
+      Article(string name, double prix, bool en_action = false)
+        : name(name), prix(prix), en_action(en_action)
+        {}
 
-      string getName(){return name;}
-      double getPrix(){return prix;}
-      bool isSolde(){return isSolde;}
+      string getName()const {return name;}
+      double getPrix()const {return prix;}
+      bool isSolde()const {return en_action;}
+
+
+  private:
+     string name;
+     double prix;
+     bool en_action;
 
 };
 
 class Achat{
-  private:
-    Article article;
-    double quantite;
-
+ 
   public:
-    Achat(Article article, double quantite)
+    Achat(Article const& article, unsigned int quantite = 1)
       : article(article), quantite(quantite)
-      {
+      {}
 
+    double prix() const{
+      double prix = article.getPrix()*quantite;
+      if (article.isSolde()){
+        prix *= 0.5;
       }
-
-    ~Achat();
-
-    void afficher(){
-      cout << article.getName() << " : " <<  article.getPrix() << " x " << quantite << " = " << article.getPrix()*quantite  << " Frs (en action) " << endl;
+      return prix;
     }
 
+    void afficher() const{
+      cout << article.getName() << " : " <<  article.getPrix() << " x " << quantite << " = " << prix() << " F " << endl;
+      if (article.isSolde()){
+        cout << "En action " << endl;
+      }
+    }
+
+     private:
+      const Article article;
+      const unsigned int quantite;
 
 };
 
 class Caddie{
 
-  private:
+  public:
+    void remplir(Article const& article, unsigned int quantite = 1){
+
+      achats.push_back(Achat(article, quantite));
+
+    }
+
+    double total() const{
+      double somme(0.0);
+
+      for(auto const& achat : achats){
+        achat.afficher();
+        somme += achat.prix();
+      }
+
+      return somme;
+    }
+
+    private:
     vector<Achat> achats;
 
+};
+
+class Caisse{
+
   public:
-    Caddie();
+    Caisse() : total(0.0){}
+    void scanner(Caddie const& caddie){
+      double montant = caddie.total();
+      total += montant;
+
+      cout << "------" << endl;
+      cout << "Montant total: " << montant << " F " << endl;
+
+
+    }
+
+    void afficher(){
+      cout << total << " F " << endl;
+    }
+
+
+
+
+
+private:
+  double total;
 
 };
 
