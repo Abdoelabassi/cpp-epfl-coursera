@@ -54,8 +54,8 @@ class Auteur{
 class Oeuvre{
 
     public:
-        Oeuvre(string titre, string const reference, Auteur auteur, string langue)
-            : titre(titre), reference(reference), auteur(auteur), langue(langue)
+        Oeuvre(string titre, Auteur const& auteur, string langue)
+            : titre(titre), auteur(auteur), langue(langue)
         {
 
         }
@@ -79,8 +79,7 @@ class Oeuvre{
 
     private:
         string titre;
-        const string reference;
-        Auteur auteur;
+        const Auteur auteur;
         string langue;
 
 };
@@ -136,11 +135,57 @@ class Bibliotheque{
 
         string getNom() const {return nom;}
 
+        void stocker(Oeuvre const& oeuvre, int n = 1){
+            for (int i = 0; i < n; ++i){
+                exemplaire.push_back(Exemplaire(oeuvre));
+            }
+
+        }
+
+        void lister_exemplaires(string langue = ""){
+
+            for (auto& exem: exemplaire){
+                langue = exem.getOeuvre().getLangue();
+                exem.afficher();
+              
+            }
+
+        }
+
+        int compter_exemplaires(Oeuvre const& oeuvre){
+
+            int count(0);
+
+            for(Exemplaire& exempl : exemplaire){
+                if (exempl.getOeuvre().getAuteur().getNom() == oeuvre.getAuteur().getNom()){
+
+                    count++;
+
+                }
+            }
+
+            return count;
+            
+        }
+
+        void afficher_auteurs(bool primee){
+
+            if (primee){
+                for(Exemplaire& ex: exemplaire){
+                    cout << "Auteur " << ex.getOeuvre().getAuteur().getNom() << endl;
+
+                }
+            }
+
+
+        }
+
 
 
 
     private:
         string nom;
+        vector<Exemplaire> exemplaire;
 
 };
 
