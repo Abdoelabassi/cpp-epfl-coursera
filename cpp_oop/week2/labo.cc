@@ -12,23 +12,25 @@ public:
     Souris(double poids, string colour, unsigned int age = 0, unsigned int esperance_vie = 36)
         : poids(poids), colour(colour), age(age), esperance_vie(esperance_vie)
         {
-            cout << "Une nouvelle souris !;" << endl;
+            cout << "Une nouvelle souris !" << endl;
+            clonee = false;
         }
     Souris(Souris const& souris)
      : poids(souris.poids), colour(souris.colour), age(souris.age), esperance_vie(4*souris.esperance_vie/5)
      {
-        cout << "Clonage d'une souris !; " << endl;
+        cout << "Clonage d'une souris ! " << endl;
+        clonee = true;
      }
 
 
      ~Souris()
      {
-        cout << "Fin d'une souris...;" << endl;
+        cout << "Fin d'une souris..." << endl;
      }
 
      void afficher(){
         if(clonee){
-            cout << "Une souris " << colour << ", clonee, " << " de  " << age << " mois et pesant " << poids << " grammes" << endl;
+            cout << "Une souris " << colour << ", clonee, " << "de  " << age << " mois et pesant " << poids << " grammes" << endl;
         }else{
             cout << "Une souris " << colour << " de " << age << " mois et pesant " << poids << " grammes" << endl;
         }
@@ -46,7 +48,7 @@ public:
      void evolue(){
 
         while(age < esperance_vie){
-            vieillir();
+            age +=1;
         }
 
      }
