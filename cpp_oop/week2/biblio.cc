@@ -125,6 +125,25 @@ class Exemplaire{
 
 };
 
+class Bibliotheque{
+
+    public:
+        Bibliotheque(string nom)
+            : nom(nom)
+        {
+            cout << "La bibliothèque " << nom << " est ouvert ! " << endl;
+        }
+
+        string getNom() const {return nom;}
+
+
+
+
+    private:
+        string nom;
+
+};
+
 /*******************************************
  * Ne rien modifier apres cette ligne.
  *******************************************/
