@@ -19,7 +19,7 @@ class Patient{
             }
 
             void afficher(){
-              cout << "Patient " << masse << " kg " << "pour " << hauteur << " m" << endl;
+              cout << "Patient : " << masse << " kg " << "pour " << hauteur << " m" << endl;
             }
 
             double poids() const{

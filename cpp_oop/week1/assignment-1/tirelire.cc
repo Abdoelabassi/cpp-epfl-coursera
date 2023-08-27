@@ -16,12 +16,12 @@ class Tirelire{
           if (montant == 0){
             cout << "Vous etes sans le sou." << endl;
           }else{
-            cout << "Vous avez: " << montant << " euros dans votre tirelire" << endl;
+            cout << "Vous avez: " << montant << " euros dans votre tirelire." << endl;
           }
         }
 
         void secouer(){
-          if(montant != 0){
+          if(montant > 0){
             cout << "Bing bing" << endl;
           }
         }
@@ -41,8 +41,9 @@ class Tirelire{
         void puiser(double amount){
           if(amount > montant){
             vider();
+          }else{
+            montant -= amount;
           }
-          this->montant -= amount;
         }
 
         bool montant_suffisant(double budget, double &solde){
