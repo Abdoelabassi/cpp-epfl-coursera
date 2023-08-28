@@ -23,7 +23,8 @@ dÃ©truit
 
 */
 
-class Auteur{
+class Auteur
+{
 
     public:
         Auteur(string nom, bool primee = false)
@@ -51,13 +52,19 @@ class Auteur{
 
 };
 
-class Oeuvre{
+class Oeuvre
+{
 
     public:
         Oeuvre(string titre, Auteur const& auteur, string langue)
             : titre(titre), auteur(auteur), langue(langue)
         {
 
+        }
+
+         ~Oeuvre()
+        {
+            cout << titre << auteur.getNom() << " en " << langue << " n'est plus disponible " << endl;
         }
 
         string getTitre() const {return titre;}
@@ -69,14 +76,7 @@ class Oeuvre{
         void afficher(){
             cout << titre << auteur.getNom() << " en " << langue << endl;
         }
-
-        ~Oeuvre()
-        {
-            cout << titre << auteur.getNom() << " en " << langue << " n'est plus disponible " << endl;
-        }
-
-
-
+        
     private:
         string titre;
         const Auteur auteur;
@@ -84,24 +84,25 @@ class Oeuvre{
 
 };
 
-class Exemplaire{
+class Exemplaire
+{
 
     public:
         Exemplaire(Oeuvre const& oeuvre)
             : oeuvre(oeuvre)
         {
-            cout << "Nouvel exemplaire de : "  << oeuvre.getTitre() << ", "  <<  oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << endl;
+            cout << "Nouvel exemplaire de : "  << " " << oeuvre.getTitre() << ", "  <<  oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << endl;
         }
 
         Exemplaire(Exemplaire const& exemplaire)
             : oeuvre(exemplaire.oeuvre)
         {
-            cout << "Copie d'un exemplaire de :" << exemplaire.oeuvre.getTitre() << ", " << exemplaire.oeuvre.getAuteur().getNom() << ", " << " en " << exemplaire.oeuvre.getLangue() << endl;
+            cout << "Copie d'un exemplaire de : " << exemplaire.oeuvre.getTitre() << ", " << exemplaire.oeuvre.getAuteur().getNom() << ", " << " en " << exemplaire.oeuvre.getLangue() << endl;
         }
 
         ~Exemplaire()
         {
-            cout << "Un exemplaire de " << oeuvre.getTitre() << ", " << oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << " a été jeté " << endl;
+            cout << "Un exemplaire de  " << oeuvre.getTitre() << ", " << oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << " a été jeté " << endl;
         }
 
         Oeuvre getOeuvre() const {
@@ -124,13 +125,14 @@ class Exemplaire{
 
 };
 
-class Bibliotheque{
+class Bibliotheque
+{
 
     public:
         Bibliotheque(string nom)
             : nom(nom)
         {
-            cout << "La bibliothèque " << nom << " est ouvert ! " << endl;
+            cout << "La bibliothèque " << nom << " est ouverte !" << endl;
         }
 
         string getNom() const {return nom;}
@@ -172,7 +174,7 @@ class Bibliotheque{
 
             if (primee){
                 for(Exemplaire& ex: exemplaire){
-                    cout << "Auteur " << ex.getOeuvre().getAuteur().getNom() << endl;
+                    cout << "Auteur : " << ex.getOeuvre().getAuteur().getNom() << endl;
 
                 }
             }
@@ -192,17 +194,16 @@ class Bibliotheque{
 /*******************************************
  * Ne rien modifier apres cette ligne.
  *******************************************/
-
 int main()
 {
   Auteur a1("Victor Hugo"),
          a2("Alexandre Dumas"),
          a3("Raymond Queneau", true);
 
-  Oeuvre o1("Les MisÃ©rables"           , a1, "franÃ§ais" ),
-         o2("L'Homme qui rit"          , a1, "franÃ§ais" ),
-         o3("Le Comte de Monte-Cristo" , a2, "franÃ§ais" ),
-         o4("Zazie dans le mÃ©tro"      , a3, "franÃ§ais" ),
+  Oeuvre o1("Les Misérables"           , a1, "français" ),
+         o2("L'Homme qui rit"          , a1, "français" ),
+         o3("Le Comte de Monte-Cristo" , a2, "français" ),
+         o4("Zazie dans le métro"      , a3, "français" ),
          o5("The Count of Monte-Cristo", a2, "anglais" );
 
   Bibliotheque biblio("municipale");
@@ -212,7 +213,7 @@ int main()
   biblio.stocker(o4);
   biblio.stocker(o5);
 
-  cout << "La bibliothÃ¨que " << biblio.getNom()
+  cout << "La bibliothèque " << biblio.getNom()
        << " offre les exemplaires suivants :" << endl;
   biblio.lister_exemplaires();
 
@@ -220,7 +221,7 @@ int main()
   cout << " Les exemplaires en "<< langue << " sont :" << endl;
   biblio.lister_exemplaires(langue);
 
-  cout << " Les auteurs Ã  succÃ¨s sont :" << endl;
+  cout << " Les auteurs à succès sont :" << endl;
   biblio.afficher_auteurs(true);
 
   cout << " Il y a " << biblio.compter_exemplaires(o3) << " exemplaires de "
