@@ -27,19 +27,17 @@ class Auteur
 {
 
     public:
-        Auteur(string nom, bool primee = false)
-            : nom(nom), primee(primee)
-        {
+        Auteur(string nom, bool primee = false) : nom(nom), primee(primee){}
 
-        }
+        Auteur(Auteur const&) = delete;
 
         string getNom() const {return nom;}
         bool getPrix(){
-            if(primee){
-                return true;
-            }
-
-            return false;
+                if(primee){
+                    return true;
+                }else{
+                    return false;
+                }
         }
 
 
@@ -56,30 +54,27 @@ class Oeuvre
 {
 
     public:
-        Oeuvre(string titre, Auteur const& auteur, string langue)
-            : titre(titre), auteur(auteur), langue(langue)
-        {
+        Oeuvre(string titre, Auteur &auteur, string langue)
+        : titre(titre), auteur(&auteur), langue(langue)
+        {}
+        Oeuvre(Oeuvre const&) = delete;
 
-        }
+        ~Oeuvre() { cout << "L'oeuvre \"" << titre << ", " << (*auteur).getNom() << ", en " << langue << "\" n'est plus disponible." << endl; }
 
-         ~Oeuvre()
-        {
-            cout << titre << auteur.getNom() << " en " << langue << " n'est plus disponible " << endl;
-        }
 
         string getTitre() const {return titre;}
 
-        Auteur getAuteur() const {return auteur;}
+        Auteur& getAuteur() const {return (*auteur);}
 
         string getLangue() const {return langue;}
 
-        void afficher(){
-            cout << titre << auteur.getNom() << " en " << langue << endl;
+        void affiche(){
+            cout << titre << ", "  << (*auteur).getNom() << ", en " << langue << endl;
         }
         
     private:
         string titre;
-        const Auteur auteur;
+        Auteur* auteur;
         string langue;
 
 };
@@ -88,10 +83,12 @@ class Exemplaire
 {
 
     public:
-        Exemplaire(Oeuvre const& oeuvre)
+        Exemplaire(Oeuvre &oeuvre)
             : oeuvre(oeuvre)
         {
-            cout << "Nouvel exemplaire de : "  << " " << oeuvre.getTitre() << ", "  <<  oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << endl;
+        cout << "Nouvel exemplaire de : ";
+        oeuvre.affiche();
+        
         }
 
         Exemplaire(Exemplaire const& exemplaire)
@@ -100,28 +97,28 @@ class Exemplaire
             cout << "Copie d'un exemplaire de : " << exemplaire.oeuvre.getTitre() << ", " << exemplaire.oeuvre.getAuteur().getNom() << ", " << " en " << exemplaire.oeuvre.getLangue() << endl;
         }
 
-        ~Exemplaire()
-        {
-            cout << "Un exemplaire de  " << oeuvre.getTitre() << ", " << oeuvre.getAuteur().getNom() << ", " << " en " << oeuvre.getLangue() << " a été jeté " << endl;
-        }
-
-        Oeuvre getOeuvre() const {
+       
+        Oeuvre& getOeuvre() const {
 
             return oeuvre;
 
         }
 
-        void afficher(){
+        void affiche(){
             cout << "Exemplaire de : " << oeuvre.getTitre() << ", " << oeuvre.getAuteur().getNom() << ", en " << oeuvre.getLangue();
         }
 
+        ~Exemplaire()
+        {
+        cout << "Un exemplaire de \"" << oeuvre.getTitre() << " , " << oeuvre.getAuteur().getNom() << ", en " << oeuvre.getLangue() << "\" a été jeté !\n";
+        }
 
 
 
 
 
     private:
-        Oeuvre oeuvre;
+        Oeuvre& oeuvre;
 
 };
 
@@ -137,20 +134,23 @@ class Bibliotheque
 
         string getNom() const {return nom;}
 
-        void stocker(Oeuvre const& oeuvre, int n = 1){
+        void stocker(Oeuvre &oeuvre, int n = 1){
+
             for (int i = 0; i < n; ++i){
-                exemplaire.push_back(Exemplaire(oeuvre));
+               Exemplaire* livre = new Exemplaire(oeuvre);
+               exemplaire.push_back(livre);
             }
 
         }
 
         void lister_exemplaires(string langue = ""){
 
-            for (auto& exem: exemplaire){
-                langue = exem.getOeuvre().getLangue();
-                exem.afficher();
-              
-            }
+           for(unsigned int i = 0; i < exemplaire.size();++i){
+                if(langue == "" || langue == exemplaire[i]->getOeuvre().getLangue()){
+                    exemplaire[i]->affiche();
+                    cout << "\n";
+                }
+           }
 
         }
 
@@ -158,8 +158,8 @@ class Bibliotheque
 
             int count(0);
 
-            for(Exemplaire& exempl : exemplaire){
-                if (exempl.getOeuvre().getAuteur().getNom() == oeuvre.getAuteur().getNom()){
+            for(unsigned int i=0; i < exemplaire.size();++i){
+                if (exemplaire[i]->getOeuvre().getAuteur().getNom() == oeuvre.getAuteur().getNom() && exemplaire[i]->getOeuvre().getTitre() == oeuvre.getTitre()){
 
                     count++;
 
@@ -170,16 +170,36 @@ class Bibliotheque
             
         }
 
-        void afficher_auteurs(bool primee){
+        void afficher_auteurs(bool primee = false){
 
-            if (primee){
-                for(Exemplaire& ex: exemplaire){
-                    cout << "Auteur : " << ex.getOeuvre().getAuteur().getNom() << endl;
-
+             if (primee == true)
+        {
+            for (int i = 0; i < exemplaire.size(); i++)
+            {
+                if (exemplaire[i]->getOeuvre().getAuteur().getPrix() == true)
+                {
+                    cout << exemplaire[i]->getOeuvre().getAuteur().getNom() << endl;
                 }
             }
+        }
+        else
+        {
+            for (int i = 0; i < exemplaire.size(); i++)
+            {
+                cout << exemplaire[i]->getOeuvre().getAuteur().getNom() << endl;
+            }
+        }
 
+            
+        }
 
+        ~Bibliotheque()
+        {
+            cout << "La bibliothèque " << nom << " ferme ses portes," << endl << "et détruit ses exemplaires :" << endl;
+            for (int i = 0; i < exemplaire.size(); i++)
+            {
+            exemplaire[i]->~Exemplaire();
+            }
         }
 
 
@@ -187,7 +207,7 @@ class Bibliotheque
 
     private:
         string nom;
-        vector<Exemplaire> exemplaire;
+        vector<Exemplaire*> exemplaire;
 
 };
 
