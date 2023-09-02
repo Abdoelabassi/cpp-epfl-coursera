@@ -20,26 +20,66 @@ int main(){
     bool qst3;
     bool qst4;
 
-    cout << "Pensez Ã  un champignon : amanite tue-mouches, pied bleu, girolle," << endl
-       << "cÃ¨pe de Bordeaux, coprin chevelu ou agaric jaunissant." << endl << endl;
+    cout << "Pensez à  un champignon : amanite tue-mouches, pied bleu, girolle," << endl
+       << "cèpe de Bordeaux, coprin chevelu ou agaric jaunissant." << endl << endl;
   
-    cout << "Est-ce que votre champignon a des lamelles (1 : oui, 0 : non) ? ";
-    cin >> qst1;
-    cout << "Est-ce que votre champignon a un anneau (1 : oui, 0 : non) ? ";
-    cin >> qst2;
     cout << "Est-ce que votre champignon a un chapeau convexe (1 : oui, 0 : non) ? ";
-    cin >> qst3;
-    cout << "Est-ce que votre champignon vit en forÃªt (1 : oui, 0 : non) ? ";
-    cin >> qst4;
-
-    cout << "==> Le champignon auquel vous pensez est ";
-
-    cout << "l'agaric jaunissant";
-    cout << "l'amanite tue-mouches";
-    cout << "le cÃ¨pe de Bordeaux";
-    cout << "le coprin chevelu";
-    cout << "la girolle";
-    cout << "le pied bleu";
+	cin >> qst1;
+	cout << endl;
+	if (qst1 == 0)
+	{
+		cout << "Est - ce que votre champignon a des lamelles(1 : oui, 0 : non) ?";
+		cin >> qst2;
+		cout << endl;
+		if (qst2 == 0)
+		{
+			cout << "==> Le champignon auquel vous pensez est ";
+			cout << "le cèpe de Bordeaux";
+		}
+		else
+		{
+			cout << "Est-ce que votre champignon a un anneau (1 : oui, 0 : non) ? ";
+			cin >> qst3;
+			cout << endl;
+			if (qst3 == 1)
+			{
+				cout << "==> Le champignon auquel vous pensez est ";
+				cout << "le coprin chevelu";
+			}
+			else
+			{
+				cout << "==> Le champignon auquel vous pensez est ";
+				cout << "la girolle";
+			}
+		}
+	}
+	else
+	{
+		cout << "Est-ce que votre champignon vit en forêt (1 : oui, 0 : non) ? ";
+		cin >> qst4;
+		cout << endl;
+		if (qst4 == 1)
+		{
+			cout << "Est-ce que votre champignon a un anneau (1 : oui, 0 : non) ? ";
+			cin >> qst3;
+			cout << endl;
+			if (qst3 == 1)
+			{
+				cout << "==> Le champignon auquel vous pensez est ";
+				cout << "l'amanite tue-mouches";
+			}
+			else
+			{
+				cout << "==> Le champignon auquel vous pensez est ";
+				cout << "le pied bleu";
+			}
+		}
+		else
+		{
+			cout << "==> Le champignon auquel vous pensez est ";
+			cout << "l'agaric jaunissant";
+		}
+	}
 
 
 
