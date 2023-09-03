@@ -1,7 +1,7 @@
 #include <iostream>
 #include <ctime>
 
-// pour les nombres alÃ©atoires
+// pour les nombres aléatoires
 #include <random>
 #include <cstring> // strlen
 
@@ -78,20 +78,20 @@ void afficher_coup(char c1, char c2, char c3, char c4,
 // ======================================================================
 void message_gagne(int nb_coups)
 {
-  cout << "Bravo ! Vous avez trouvÃ© en " << nb_coups << " coups." << endl;
+  cout << "Bravo ! Vous avez trouvé en " << nb_coups << " coups." << endl;
 }
 
 // ======================================================================
 void message_perdu(char c1, char c2, char c3, char c4)
 {
   cout << "Perdu :-(" << endl;
-  cout << "La bonne combinaison Ã©tait : ";
+  cout << "La bonne combinaison était : ";
   afficher_couleurs(c1, c2, c3, c4);
   cout << endl;
 }
 
 /*****************************************************
- * ComplÃ©ter le code Ã  partir d'ici
+ * Compléter le code à  partir d'ici
  *****************************************************/
 
 // ======================================================================
@@ -201,7 +201,7 @@ void jouer(int maxCoup = 8)
 }
 
 /*******************************************
- * Ne rien modifier aprÃ¨s cette ligne.
+ * Ne rien modifier aprés cette ligne.
  *******************************************/
 
 int main()
