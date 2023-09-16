@@ -7,7 +7,6 @@ using namespace std;
 typedef string Forme   ;
 typedef string Couleur ;
 
-
 class Brique
 {
 private:
@@ -18,16 +17,12 @@ public:
   /*****************************************************
     Compléter le code à partir d'ici
   *******************************************************/
- Brique(Forme _forme, Couleur _couleur) : forme(_forme), couleur(_couleur)
+ Brique(Forme f = "", Couleur c = "") : forme(f), couleur(c)
  {}
  Brique() = delete;
 
- friend ostream& afficher(ostream& sortie);
- ostream& afficher(ostream& sortie) const;
 
-};
-
-ostream& Brique::afficher(ostream& sortie) const
+ ostream& afficher(ostream& sortie) const
 {
   if (couleur != "")
   {
@@ -38,7 +33,11 @@ ostream& Brique::afficher(ostream& sortie) const
     sortie << forme << endl;
   }
 
+  return sortie;
+
 }
+
+};
 
 ostream& operator<<(ostream& sortie, Brique const& brique)
 {
@@ -50,7 +49,76 @@ typedef vector<vector<vector<Brique>>> Base;
 class Construction
 {
   friend class Grader;
+  public:
+    Construction(Brique b)
+    {
+      contenu = {{{b}}};
+    }
+    friend const Construction operator+(Construction c1, Construction& c2);
+    friend const Construction operator-(Construction c1, Construction& c2);
+    friend const Construction operator^(Construction c1, Construction& c2);
 
+    ostream& afficher(ostream& sortie) const
+    {
+      for (unsigned int i = contenu.size() - 1; i >= 0; i--)
+      {
+        sortie << "Couche " << i << " : " << endl;
+  
+        for (unsigned int j(0); j < contenu[i].size(); j++)
+        {
+          for ( unsigned  k(0); k < contenu[i][j].size(); k++)
+          {
+            sortie << contenu[i][j][k] << " ";
+          }
+          sortie << endl;
+        }
+      }
+
+      return sortie;
+      }
+    
+    void operator=(Construction const& b)
+    {
+        contenu.clear();
+        move(b.contenu.begin(), b.contenu.end(), back_inserter(contenu));
+    }
+
+
+      void operator^=(Construction const& c)
+      {
+        move(c.contenu.begin(), c.contenu.end(), back_inserter(contenu));
+      }
+
+      void operator-=(Construction const& c)
+      {
+        if (c.contenu.size() >= contenu.size())
+        {
+          for (unsigned int i(0); i < contenu.size(); i++)
+          {
+            move(c.contenu[i].begin(), c.contenu[i].end(), back_inserter(contenu[i]));
+          }
+        }
+
+      }
+
+      void operator+=(Construction const& c)
+      {
+        if (c.contenu.size() >= contenu.size())
+        {
+          for (unsigned int i(0); i < contenu.size(); i++)
+          {
+            if (c.contenu[i].size() >= contenu[i].size())
+            {
+              for (unsigned int j(0); j < contenu[i].size(); j ++)
+              {
+                move(c.contenu[i][j].begin(), c.contenu[i][j].end(), back_inserter(contenu[i][j]));
+
+              }
+            }
+          }
+        }
+      }
+    
 
 
   private:
@@ -58,16 +126,61 @@ class Construction
 
 };
 
+ostream& operator<<(ostream& sortie, Construction const& c)
+{
+  c.afficher(sortie);
+}
+
+const Construction operator^(Construction c1, Construction const& c2)
+{
+  c1 ^= c2;
+  return c1;
+}
+
+const Construction operator-(Construction c1, Construction const& c2)
+{
+  c1 -= c2;
+  return c1;
+
+}
+
+const Construction operator+(Construction c1, Construction& c2)
+{
+  c1 += c2;
+  return c1;
+}
+
 const Construction operator*(unsigned int n, Construction const& a)
 {
+  Construction c = a;
+  for (unsigned int i(0); i < n - 1; i++)
+  {
+    c += a;
+  }
+
+  return c;
 }
 
 const Construction operator/(unsigned int n, Construction const& a)
 {
+  Construction c = a;
+  for (unsigned int i(0); i < n - 1; i++)
+  {
+     c ^= a;
+  }
+
+  return c;
 }
 
 const Construction operator%(unsigned int n, Construction const& a)
 {
+  Construction c = a;
+  for (unsigned int i(0); i < n - 1; i++)
+  {
+     c -= a;
+  }
+
+  return c;
 }
 
 /*******************************************
