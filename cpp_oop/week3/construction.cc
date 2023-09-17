@@ -46,9 +46,7 @@ class Construction
     Base contenu;
   
   public:
-    friend const Construction operator+(Construction a, Construction& b);
-    friend const Construction operator-(Construction a, Construction& b);
-    friend const Construction operator^(Construction a, Construction& b);
+    
     Construction(Brique b)
     {
       contenu = {{{b}}};
