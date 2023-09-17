@@ -24,15 +24,8 @@ public:
 
  ostream& afficher(ostream& sortie) const
 {
-  if (couleur != "")
-  {
-    sortie << "(" << forme << ", " << couleur << ")" << endl;
-  }
-  else if (couleur == "")
-  {
-    sortie << forme << endl;
-  }
-
+   if (couleur == "") sortie << forme;
+   else sortie << "( " << forme << ", " << couleur << " )";
   return sortie;
 
 }
@@ -49,24 +42,28 @@ typedef vector<vector<vector<Brique>>> Base;
 class Construction
 {
   friend class Grader;
+  private:
+    Base contenu;
+  
   public:
+    friend const Construction operator+(Construction a, Construction& b);
+    friend const Construction operator-(Construction a, Construction& b);
+    friend const Construction operator^(Construction a, Construction& b);
     Construction(Brique b)
     {
       contenu = {{{b}}};
     }
-    friend const Construction operator+(Construction c1, Construction& c2);
-    friend const Construction operator-(Construction c1, Construction& c2);
-    friend const Construction operator^(Construction c1, Construction& c2);
+    
 
     ostream& afficher(ostream& sortie) const
     {
-      for (unsigned int i = contenu.size() - 1; i >= 0; i--)
+      for (int i = contenu.size() - 1; i >= 0; i--)
       {
         sortie << "Couche " << i << " : " << endl;
   
         for (unsigned int j(0); j < contenu[i].size(); j++)
         {
-          for ( unsigned  k(0); k < contenu[i][j].size(); k++)
+          for (unsigned int k(0); k < contenu[i][j].size(); k++)
           {
             sortie << contenu[i][j][k] << " ";
           }
@@ -109,7 +106,7 @@ class Construction
           {
             if (c.contenu[i].size() >= contenu[i].size())
             {
-              for (unsigned int j(0); j < contenu[i].size(); j ++)
+              for (unsigned int j(0); j < contenu[i].size(); j++)
               {
                 move(c.contenu[i][j].begin(), c.contenu[i][j].end(), back_inserter(contenu[i][j]));
 
@@ -120,10 +117,6 @@ class Construction
       }
     
 
-
-  private:
-    Base contenu;
-
 };
 
 ostream& operator<<(ostream& sortie, Construction const& c)
@@ -131,23 +124,23 @@ ostream& operator<<(ostream& sortie, Construction const& c)
   return c.afficher(sortie);
 }
 
-const Construction operator^(Construction c1, Construction const& c2)
+const Construction operator^(Construction a, Construction const& b)
 {
-  c1 ^= c2;
-  return c1;
+  a ^= b;
+  return a;
 }
 
-const Construction operator-(Construction c1, Construction const& c2)
+const Construction operator-(Construction a, Construction const& b)
 {
-  c1 -= c2;
-  return c1;
+  a -= b;
+  return a;
 
 }
 
-const Construction operator+(Construction c1, Construction& c2)
+const Construction operator+(Construction a, Construction const& b)
 {
-  c1 += c2;
-  return c1;
+  a += b;
+  return a;
 }
 
 const Construction operator*(unsigned int n, Construction const& a)
