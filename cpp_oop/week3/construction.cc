@@ -41,7 +41,7 @@ public:
 
 ostream& operator<<(ostream& sortie, Brique const& brique)
 {
-  brique.afficher(sortie);
+  return brique.afficher(sortie);
 }
 
 typedef vector<vector<vector<Brique>>> Base;
@@ -128,7 +128,7 @@ class Construction
 
 ostream& operator<<(ostream& sortie, Construction const& c)
 {
-  c.afficher(sortie);
+  return c.afficher(sortie);
 }
 
 const Construction operator^(Construction c1, Construction const& c2)
