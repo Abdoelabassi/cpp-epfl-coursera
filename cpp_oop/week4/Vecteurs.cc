@@ -77,6 +77,14 @@ class Vecteur : public Point3D
             n = sqrt(x*x + y*y + z*z);
             return n;
         }
+        // angle entre deux vecteur
+        double angle(const Vecteur& v1, const Vecteur& v2)
+        {
+            double phi;
+            phi = acos(v1*v2/(v1.norm() * v2.norm()));
+            return phi;
+        }
+    
        
         // operator opposee
         const Vecteur operator-() const {
@@ -128,13 +136,28 @@ class Vecteur : public Point3D
 
         }
 
-         // angle entre deux vecteur
-        double angle(const Vecteur& v1, const Vecteur& v2)
+       
+class VecteurUnitaire : public Vecteur
+{
+    public:
+        VecteurUnitaire() : Vecteur() {}
+        VecteurUnitaire(double x_, double y_, double z_)
+            : Vecteur(x_, y_, z_)
+            {}
+        // norm
+        double norm() const
         {
-            double phi;
-            phi = acos(v1*v2/(v1.norm() * v2.norm()));
-            return phi;
+            return 1.0;
         }
+        // angle
+        double angle(const VecteurUnitaire& u1, const VecteurUnitaire& u2) 
+        {
+            return (acos(u1*u2/(u1.norm() * u2.norm())));
+        }
+
+
+
+};
 
 int main()
 {
@@ -168,7 +191,7 @@ int main()
     cout << "2xS cordonnees: ";
     S.affiche(cout);
     cout << endl;
-    double angl(angle(v1, v2));
+    double angl(v1.angle(v1, v2));
     cout << "angle entre v1 et v2 en Deg: " << angl << endl;
 
 
