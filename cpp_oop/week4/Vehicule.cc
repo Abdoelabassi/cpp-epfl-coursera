@@ -4,26 +4,32 @@
 
 using namespace std;
 
+enum Type_Avion {REACTION , HELICES};
+
 class Vehicule
 {
-    private:
-        unsigned int date;
 
     protected:
         string marque;
-        double prix;
+        unsigned int date;
+        double prix_achat;
+        double prix_courant;
+
 
     public:
         Vehicule(string marque_, unsigned int date_, double prix_)
-            : marque(marque_), date(date_), prix(prix_) {}
+            : marque(marque_), date(date_), prix_achat(prix_), prix_courant(prix_) 
+            {}
 
         void affiche(ostream& sortie) const {
-            sortie << "La marque: " << marque << ", date d'achat: " << date << ", prix d'achat: " << prix;
+            sortie << "La marque: " << marque << ", date d'achat: " << date 
+            << ", prix d'achat: " << prix_achat << ", prix actuel: " << prix_courant;
         }
 
     void calculPrix()
     {
-        prix /= 0.001;
+        double decote((2023 - date)*0.01);
+        prix_courant = max(0.0, (1.0 - decote)*prix_achat);    
     }
 
 
@@ -49,32 +55,24 @@ class Voiture : public Vehicule
             sortie << cylindree << " Litres " << nombre_de_portes << " portes " << puissance << " CV " << kilometrage << " Km. " << endl;
         }
 
-        void calculPrix()
+        void calculePrix()
         {
-            if (prix < 0.0)
-            {
-                prix = 0.0;
-            }
-            else if (kilometrage >= 10000)
-            {
-                prix /= 0.05;
+            double decote((2023 - date)*0.02);
+            decote += 0.05 * (kilometrage/10000);
 
-            }
-            else if (marque == "Fiat" || marque == "Renault")
+            if (marque == "Fiat" || marque == "Renault")
             {
-                prix /= 0.1;
+                decote += 0.1;
             }
             else if (marque == "Ferrari" || marque == "Porsche")
             {
-                prix /= 0.2;
-
-            }
-            else
-            {
-                prix /= 0.02;
+                decote -= 0.2;
             }
 
-            cout << "prix actuel: " << prix;
+            prix_courant = max(0.0, (1.0 - decote)*prix_achat);
+
+            
+
         }
 
 };
@@ -82,38 +80,41 @@ class Voiture : public Vehicule
 class Avion : public Vehicule
 {
     private:
-        string type;
+        Type_Avion mouteur;
         unsigned int nombre_heure_vol;
 
     public:
-        Avion(string marque_, unsigned int date_, double prix_, string type_, unsigned int nhvol_)
-            : Vehicule(marque_, date_, prix_), type(type_), nombre_heure_vol(nhvol_)
+        Avion(string marque_, unsigned int date_, double prix_, Type_Avion mouteur_, unsigned int nhvol_)
+            : Vehicule(marque_, date_, prix_), mouteur(mouteur_), nombre_heure_vol(nhvol_)
             {}
 
         void affiche(ostream& sortie)
         {
-            sortie << "-------Avion a " << type << "-----------" << endl;
+            sortie << "-------Avion a ";
+            if (mouteur == HELICES) sortie << "hélices";
+            else sortie << "réaction";
+            sortie << "---------" << endl;
             Vehicule::affiche(sortie);
             sortie << endl;
             sortie << nombre_heure_vol << " heures de vol " << endl;
         }
 
-        void calculPrix()
+        void calculePrix()
         {
-            if (prix < 0.0)
+            double decote;
+
+            if (mouteur == HELICES)
             {
-                prix = 0.0;
+                decote += 0.1*(nombre_heure_vol/1000);
             }
-            else if (nombre_heure_vol == 1000)
+            else
             {
-                prix /= 0.1;
-            }
-            else if (nombre_heure_vol == 100)
-            {
-                prix /= 0.1;
+                decote += 0.1*(nombre_heure_vol/100);
             }
 
-            cout << "prix actuel: " << prix;
+            prix_courant = max(0.0, (1.0 - decote)*prix_achat);
+            
+           
            
         }
 
@@ -125,8 +126,6 @@ int main()
   vector<Voiture> garage;
   vector<Avion>   hangar;
  
-  string REACTION = "REACTION";
-  string HELICES = "HELICES";
 
 
   garage.push_back(Voiture("Peugeot", 1998, 147325.79, 2.5, 5, 180.0,
@@ -140,16 +139,17 @@ int main()
   hangar.push_back(Avion("Nain Connu", 1992, 4321098.00, REACTION,
                          1300));
 
+    cout << "--------------------------------------------------------------  ANNEE : 2023 ----------------------------------------- " << endl; 
 
   for (auto voiture : garage)
   {
-    voiture.calculPrix();
+    voiture.calculePrix();
     voiture.affiche(cout);
   }
 
   for (auto avion : hangar)
   {
-    avion.calculPrix();
+    avion.calculePrix();
     avion.affiche(cout);
   }
 
