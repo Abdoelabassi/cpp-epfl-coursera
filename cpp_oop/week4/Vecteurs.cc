@@ -140,19 +140,55 @@ class Vecteur : public Point3D
 class VecteurUnitaire : public Vecteur
 {
     public:
-        VecteurUnitaire() : Vecteur() {}
+        VecteurUnitaire() : Vecteur(1.0, 0.0, 0.0) {}
         VecteurUnitaire(double x_, double y_, double z_)
             : Vecteur(x_, y_, z_)
-            {}
+            { normalize(); }
+
+        // constructeur copie
+        VecteurUnitaire(Vecteur const& copie) { Vecteur(copie); }
         // norm
         double norm() const
         {
             return 1.0;
         }
+        // normalise
+        void normalize()
+        {
+            double n(Vecteur::norm());
+
+            if (n == 0.0)
+            {
+                *this = VecteurUnitaire();
+            }
+            else{
+                x /= n; y /= n; z /= n;
+            }
+        }
         // angle
         double angle(const VecteurUnitaire& u1, const VecteurUnitaire& u2) 
         {
             return (acos(u1*u2/(u1.norm() * u2.norm())));
+        }
+
+        // redifintion des operateurs d'affectation
+        VecteurUnitaire& operator+=(const VecteurUnitaire& u)
+        {
+            Vecteur::operator+=(u);
+            normalize();
+            return *this;
+        }
+        VecteurUnitaire& operator-=(const VecteurUnitaire& u)
+        {
+            Vecteur::operator-=(u);
+            normalize();
+            return *this;
+        }
+        VecteurUnitaire& operator*=(double a)
+        {
+            Vecteur::operator*=(a);
+            normalize();
+            return *this;
         }
 
 
