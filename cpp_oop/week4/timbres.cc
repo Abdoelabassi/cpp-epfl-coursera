@@ -10,6 +10,34 @@ private:
   /*****************************************************
    * Compléter le code à partir d'ici
    *****************************************************/
+  protected:
+    string nom;
+    unsigned int annee;
+    string pays;
+    double valeur_faciale;
+
+  public:
+    Timbre(string nom_, unsigned int annee_, string pays_ = "Suisse", double valeur_faciale_ = 1.0)
+      : nom(nom_), annee(annee_). pays(pays_), valeur_faciale(valeur_faciale_)
+      {}
+
+    double vente()
+    {
+      double prix_vente = 50 * (annee / 10.0);
+      return prix_vente;
+    }
+    
+    unsigned int age()
+    {
+      unsigned int age_ = ANNEE_COURANTE - annee;
+      return age_; 
+    }
+    void affiche(ostream& affichage)
+    {
+      affichage << "Timbre de nom " << nom << " datant de " << annee << "(provenance " << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs ";
+    }
+
+
 
 };
 
