@@ -15,16 +15,29 @@ private:
     unsigned int annee;
     string pays;
     double valeur_faciale;
+    enum PRIX_BASE {PRIX_BASE_TRES_RARE = 600, PRIX_BASE_RARE = 400, PRIX_BASE_PEU_RARE = 50};
 
   public:
     Timbre(string nom_, unsigned int annee_, string pays_ = "Suisse", double valeur_faciale_ = 1.0)
-      : nom(nom_), annee(annee_). pays(pays_), valeur_faciale(valeur_faciale_)
+      : nom(nom_), annee(annee_), pays(pays_), valeur_faciale(valeur_faciale_)
       {}
+    friend ostream& operator<<(ostream& affichage, const Timbre& t);
+
 
     double vente()
     {
-      double prix_vente = 50 * (annee / 10.0);
-      return prix_vente;
+      double prix_vente(0);
+      if (ANNEE_COURANTE - annee <= 5)
+      {
+        prix_vente += valeur_faciale;
+        return prix_vente;
+      }
+      else
+      {
+        prix_vente += valeur_faciale*2.5*(ANNEE_COURANTE - annee);
+        return prix_vente;
+
+      }
     }
     
     unsigned int age()
@@ -32,13 +45,37 @@ private:
       unsigned int age_ = ANNEE_COURANTE - annee;
       return age_; 
     }
-    void affiche(ostream& affichage)
+    
+
+
+
+};
+
+ostream& operator<<(ostream& affichage, const Timbre& t)
     {
-      affichage << "Timbre de nom " << nom << " datant de " << annee << "(provenance " << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs ";
+      affichage << "Timbre de nom " << t.nom << " datant de " << t.annee << "(provenance " << t.pays << ") ayant pour valeur faciale " << t.valeur_faciale << " francs ";
+      return affichage;
     }
 
+class Rare : public Timbre
+{
+  public:
+    Rare(string nom_, unsigned int annee_, string pays_, double valeur_faciale_, unsigned int exemplaires_)
+      : Timbre(nom_, annee_, pays_, valeur_faciale_), exemplaires(exemplaires_)
+      {}
 
 
+  private:
+    unsigned int exemplaires;
+
+};
+
+class Commemoratif : public Timbre
+{
+  public:
+    Commemoratif(string nom_, unsigned int annee_, string pays_, double valeur_faciale_)
+      : Timbre(nom_, annee_, pays_, valeur_faciale_)
+      {}
 };
 
 /*******************************************
