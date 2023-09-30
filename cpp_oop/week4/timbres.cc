@@ -21,8 +21,13 @@ private:
     Timbre(string nom_, unsigned int annee_, string pays_ = "Suisse", double valeur_faciale_ = 1.0)
       : nom(nom_), annee(annee_), pays(pays_), valeur_faciale(valeur_faciale_)
       {}
-    friend ostream& operator<<(ostream& affichage, const Timbre& t);
 
+    void afficher(ostream& affichage) const
+    {
+        affichage << "Timbre de nom " << nom << " datant de " << annee << " (provenance " << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs ";
+
+
+    }
 
     double vente()
     {
@@ -53,30 +58,84 @@ private:
 
 ostream& operator<<(ostream& affichage, const Timbre& t)
     {
-      affichage << "Timbre de nom " << t.nom << " datant de " << t.annee << "(provenance " << t.pays << ") ayant pour valeur faciale " << t.valeur_faciale << " francs ";
+      t.afficher(affichage);
       return affichage;
     }
 
 class Rare : public Timbre
 {
   public:
-    Rare(string nom_, unsigned int annee_, string pays_, double valeur_faciale_, unsigned int exemplaires_)
-      : Timbre(nom_, annee_, pays_, valeur_faciale_), exemplaires(exemplaires_)
+    Rare(string nom_, unsigned int annee_, string pays_, double valeur_faciale_, unsigned int exemplaire_ = 100)
+      : Timbre(nom_, annee_, pays_, valeur_faciale_), exemplaire(exemplaire_)
       {}
 
+    unsigned int nb_exemplaire() const
+    {
+      return exemplaire;
+    }
+    void afficher(ostream& affichage) const
+    {
+        affichage << "Timbre rare ( " << exemplaire << " ex. ) de nom " << nom << " datant de " << annee << " (provenance " << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs ";
+    }
+
+   
+  
+  double vente()
+  {
+    double prix_vente(0);
+
+    if (exemplaire < 100)
+    {
+      prix_vente += PRIX_BASE_TRES_RARE * (age() / 10.0);
+      return prix_vente;
+    }
+    else if (exemplaire > 100 && exemplaire < 1000)
+    {
+      prix_vente += PRIX_BASE_RARE * (age() / 10.0);
+      return prix_vente;
+    }
+    else
+    {
+      prix_vente += PRIX_BASE_PEU_RARE * (age() / 10.0);
+      return prix_vente;
+    }
+  }
 
   private:
-    unsigned int exemplaires;
+    unsigned int exemplaire;
 
 };
+
+ostream& operator<<(ostream& affichage, Rare const& r)
+{
+  r.afficher(affichage);
+  return affichage;
+}
 
 class Commemoratif : public Timbre
 {
   public:
-    Commemoratif(string nom_, unsigned int annee_, string pays_, double valeur_faciale_)
+    Commemoratif(string nom_, unsigned int annee_, string pays_, double valeur_faciale_ )
       : Timbre(nom_, annee_, pays_, valeur_faciale_)
       {}
+
+   
+    double vente()
+    {
+      return (Timbre::vente() * 2);
+    }
+
+    void afficher(ostream& affichage) const
+    {
+        affichage << "Timbre commémoratif de nom " << nom << " datant de " << annee << " (provenance " << pays << ") ayant pour valeur faciale " << valeur_faciale << " francs ";
+    }
 };
+
+ostream& operator<<(ostream& affichage, Commemoratif const& c)
+{
+      c.afficher(affichage);
+      return affichage;
+}
 
 /*******************************************
  * Ne rien modifier après cette ligne.

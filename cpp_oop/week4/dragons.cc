@@ -13,14 +13,82 @@ class Creature
   /*****************************************************
    * Compléter le code à partir d'ici
    *****************************************************/
+  protected:
+    string nom_;
+    int niveau_;
+    int points_de_vie_;
+    int force_;
+    int position_;
 
-         << ", niveau: "
-         << ", points de vie: "
-         << ", force: "
-         << ", points d'attaque: "
-         << ", position: "
+  public:
+    Creature(string nom, int niveau, int points_de_vie, int force, int position = 0)
+      : nom_(nom), niveau_(niveau), points_de_vie_(points_de_vie), force_(force), position_(position)
+      {}
+    bool vivant()
+    {
+      if (points_de_vie_ > 0)
+      {
+        return true;
+      }
+      return false;
+    }
+    int points_attaque()
+    {
+      if (points_de_vie_ > 0)
+      {
+        return niveau_ * force_;
+      }
 
-         << " n'est plus !"
+      return 0;
+    }
+
+    void deplacer(int d)
+    {
+      position_ += d;
+    }
+
+    void audiex()
+    {
+      cout << nom_ << " n’est plus! " << endl;
+    }
+
+    void faibilir(int retranche)
+    {
+      if (points_de_vie_ > 0)
+      {
+        points_de_vie_ -= retranche;
+      }
+      else if (points_de_vie_ == 0)
+      {
+        points_de_vie_ = 0;
+        audiex();
+      }
+    }
+
+    void afficher()
+    {
+      cout << nom_ << ", niveau: " << niveau_ << ", points de vie: " << points_de_vie_ << ", force: " << force_ << ", \
+points d’attaque: " << points_attaque() << ", position: " << position_;
+  
+    }
+
+
+};
+
+class Dragon : public Creature
+{
+  private:
+    int portee_flammee;
+
+  public:
+    Dragon(string nom, int niveau, int points_de_vie, int force, int portee_flamme_, int position = 0)
+      : Creature(nom, niveau, points_de_vie, force, position), portee_flammee(portee_flamme_)
+      {}
+    
+    void voler(int pos)
+    {
+      position_ += pos;
+    }
 
 };
 /*******************************************
