@@ -42,6 +42,11 @@ class Creature
       return 0;
     }
 
+    int position() const
+    {
+      return position_;
+    }
+
     void deplacer(int d)
     {
       position_ += d;
@@ -49,7 +54,7 @@ class Creature
 
     void audiex()
     {
-      cout << nom_ << " n’est plus! " << endl;
+      cout << nom_ << " n'est plus! " << endl;
     }
 
     void faibilir(int retranche)
@@ -68,7 +73,7 @@ class Creature
     void afficher()
     {
       cout << nom_ << ", niveau: " << niveau_ << ", points de vie: " << points_de_vie_ << ", force: " << force_ << ", \
-points d’attaque: " << points_attaque() << ", position: " << position_;
+points d’attaque: " << points_attaque() << ", position: " << position_ << endl;
   
     }
 
@@ -90,7 +95,57 @@ class Dragon : public Creature
       position_ += pos;
     }
 
+    void souffle_sur(Creature& bete)
+    {
+      int d(distance(this->position_, bete.position()));
+      if (this->vivant() && bete.vivant() && d <= portee_flammee)
+      {
+        this->points_attaque();
+        bete.faibilir(this->points_attaque());
+        this->faibilir(this->points_attaque());
+        this->points_de_vie_ -= d;
+
+
+
+      }
+    }
+
 };
+
+class Hydre : public Creature
+{
+  private:
+    int longueur_cou_;
+    int dose_poison_;
+
+    public:
+      Hydre(string nom, int niveau, int points_de_vie , int force, int longueur_cou, int dose_posion, int position = 0)
+        : Creature(nom, niveau, points_de_vie, force, position), longueur_cou_(longueur_cou), dose_poison_(dose_posion) {}
+      
+      void empoisonne(Creature& bete)
+      {
+        int d = distance(this->position_, bete.position());
+        if (this->vivant() && bete.vivant() && d <= longueur_cou_)
+        {
+          bete.faibilir(this->points_attaque());
+          dose_poison_++;
+
+
+
+        }
+
+      }
+
+
+     
+
+};
+
+ void combat(Dragon& dragon, Hydre& hydre)
+      {
+        hydre.empoisonne(dragon);
+        dragon.souffle_sur(hydre);
+      }
 /*******************************************
  * Ne rien modifier après cette ligne.
  *******************************************/
