@@ -69,7 +69,7 @@ class Rare : public Timbre
       : Timbre(nom_, annee_, pays_, valeur_faciale_), exemplaire(exemplaire_)
       {}
 
-    unsigned int nb_exemplaire() const
+    unsigned int nb_exemplaires() const
     {
       return exemplaire;
     }
