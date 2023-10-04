@@ -24,22 +24,22 @@ class Creature
     Creature(string nom, int niveau, int points_de_vie, int force, int position = 0)
       : nom_(nom), niveau_(niveau), points_de_vie_(points_de_vie), force_(force), position_(position)
       {}
-    bool vivant()
+    bool vivant() const
     {
       if (points_de_vie_ > 0)
       {
         return true;
       }
-      return false;
+      else return false;
     }
     int points_attaque()
     {
-      if (points_de_vie_ > 0)
+      if (vivant() == true)
       {
         return niveau_ * force_;
       }
 
-      return 0;
+      else return 0;
     }
 
     int position() const
@@ -52,23 +52,23 @@ class Creature
       position_ += d;
     }
 
-    void audiex()
+    void audiex() const
     {
       cout << nom_ << " n'est plus! " << endl;
     }
 
-    void faibilir(int retranche)
+    void faiblir(int retranche)
     {
       if (vivant() == true)
       {
         points_de_vie_ -= retranche;
-        if (points_de_vie_ == 0)
+        if (points_de_vie_ < 0)
         {
           points_de_vie_ = 0;
         }
 
       }
-      else if (vivant() == false)
+      if (vivant() == false)
       {
         points_de_vie_ = 0;
         audiex();
@@ -97,18 +97,18 @@ class Dragon : public Creature
     
     void voler(int pos)
     {
-      position_ += pos;
+      deplacer(pos);
     }
 
     void souffle_sur(Creature& bete)
     {
-      int d(distance(this->position_, bete.position()));
+      int d(distance(this->position(), bete.position()));
       if (this->vivant() == true && bete.vivant() == true)
       {
         if (portee_flammee >= d)
         {
-          bete.faibilir(this->points_attaque());
-          this->faibilir(d);
+          bete.faiblir(this->points_attaque());
+          this->faiblir(d);
         }
         if (bete.vivant() == false && this->vivant() == true)
       {
@@ -137,7 +137,7 @@ class Hydre : public Creature
         {
          if (longueur_cou_ >= d)
          {
-            bete.faibilir(this->points_attaque() + this->dose_poison_);
+            bete.faiblir(this->points_attaque() + this->dose_poison_);
          }
          if (bete.vivant() == false && this->vivant() == true)
          {
