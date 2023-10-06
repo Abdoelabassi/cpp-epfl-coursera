@@ -44,7 +44,8 @@ class Creature
 
     void deplacer(int d)
     {
-      position_ += d;
+      if (vivant() == true)
+        position_ += d;
     }
     void audieux() const
     {
@@ -95,7 +96,7 @@ class Dragon : public Creature
     
     void voler(int pos)
     {
-      deplacer(pos);
+        this->deplacer(pos);
     }
 
     void souffle_sur(Creature& bete)
@@ -103,7 +104,7 @@ class Dragon : public Creature
       int d(distance(bete.position(), this->position()));
       if (this->vivant() == true && bete.vivant() == true)
       {
-        if (portee_flammee_ >= d)
+        if (this->portee_flammee_ >= d)
         {
           bete.faiblir(this->points_attaque());
           this->faiblir(d);
@@ -133,7 +134,7 @@ class Hydre : public Creature
         int d = distance(bete.position(), this->position());
         if (this->vivant() == true && bete.vivant() == true)
         {
-         if (longueur_cou_ >= d)
+         if (this->longueur_cou_ >= d)
          {
             bete.faiblir(this->points_attaque() + this->dose_poison_);
          }
