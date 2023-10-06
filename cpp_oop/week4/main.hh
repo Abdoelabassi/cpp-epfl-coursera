@@ -24,7 +24,7 @@ class Creature
     int position_;
 
     public:
-        Creature(const string nom, int niveau, int points_de_vie, int force, int position = 0);
+        Creature(const string nom, int niveau, int points_de_vie, int force, int position);
 
         bool vivant() const;
         int points_attaque() const;
@@ -40,7 +40,7 @@ class Dragon : public Creature
     private:
         int portee_flammee_;
     public:
-        Dragon(const string nom, int niveau, int points_de_vie, int force, int portee_flamme, int position = 0);
+        Dragon(const string nom, int niveau, int points_de_vie, int force, int portee_flamme, int position);
         
         void voler(int pos);
 
@@ -55,7 +55,7 @@ class Hydre : public Creature
         int dose_poison_;
 
     public:
-        Hydre(const string nom, int niveau, int points_de_vie , int force, int longueur_cou, int dose_posion, int position = 0);
+        Hydre(const string nom, int niveau, int points_de_vie , int force, int longueur_cou, int dose_posion, int position);
 
         void empoisonne(Creature& bete);
 

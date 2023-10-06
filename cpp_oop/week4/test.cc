@@ -108,6 +108,13 @@ void Hydre::empoisonne(Creature& bete)
 int main()
 {
 
+	Creature c1("Charybde" , 2, 99, 4, 178);
+
+    c1.afficher();
+
+    c1.faiblir(12);
+
+    c1.afficher();
 
 
 
