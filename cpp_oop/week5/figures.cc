@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <memory>
 
 using namespace std;
 
@@ -7,7 +8,7 @@ class Figure
 {
     public:
         virtual void affiche() const = 0;
-        virtual Figure* copie() const = 0;
+        virtual unique_ptr<Figure> copie() const = 0;
     virtual ~Figure(){cout << "Une figure de moin" << endl;}
 };
 
@@ -28,10 +29,10 @@ class Cercle : public Figure
         {
             cout << "Rayon de Cercle: " << rayon << endl;
         }
-        Figure* copie() const
+        unique_ptr<Figure> copie() const override
         {
-            Figure* f = new Cercle(*this);
-            return f;
+            return unique_ptr<Figure> (new Cercle(*this));
+            
         }
 
 };
@@ -52,10 +53,10 @@ class Carre: public Figure
         {
             cout << "Square's Cote: " << cote << endl;
         }
-        Figure* copie() const
+        unique_ptr<Figure> copie() const override
         {
-            Figure* f = new Carre(*this);
-            return f;
+            return unique_ptr<Figure> (new Carre(*this));
+            
         }
 };
 class Triangle: public Figure
@@ -76,10 +77,10 @@ class Triangle: public Figure
         {
             cout << "Hauteur de triangle: " << hauteur << ", base de triangle: " << base << endl;
         }
-        Figure* copie() const
+        unique_ptr<Figure> copie() const override
         {
-            Figure* f = new Triangle(*this);
-            return f;
+            return unique_ptr<Figure> (new Triangle(*this));
+            
         }
 };
 
@@ -89,7 +90,6 @@ class Dessin
         ~Dessin()
         {
             cout << "Le dessin s'efface..." << endl;
-            for (auto& fig: figures){delete fig;}
         }
         void ajouteFigure(Figure const& figure){
             figures.push_back(figure.copie());
@@ -103,8 +103,15 @@ class Dessin
             }
         }
     private:
-        vector<Figure*> figures;
+        vector<unique_ptr<Figure>> figures;
 };
+
+void unCercleDePlus(Dessin const& img) {
+   Dessin tmp(img);            
+   tmp.ajouteFigure(Cercle(1));
+   cout << "Affichage de 'tmp': " << endl;
+   tmp.affiche();          
+}
 
 int main() {
    Dessin dessin;         
@@ -113,5 +120,7 @@ int main() {
    dessin.ajouteFigure(Triangle(6,1));
    dessin.ajouteFigure(Cercle(12));
    cout << endl << "Affichage du dessin : " << endl;
-   dessin.affiche();  
+   dessin.affiche();
+
+   unCercleDePlus(dessin);
 }
