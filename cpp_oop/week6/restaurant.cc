@@ -92,9 +92,7 @@ class ProduitCuisine: public Produit
     }
     const ProduitCuisine* adapter(double n)
     {
-      r.adapter(n);
-      Produit* p = new ProduitCuisine(nom);
-      return p;
+      
 
     }
 
