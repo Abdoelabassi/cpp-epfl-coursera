@@ -7,7 +7,99 @@ using namespace std;
 /*****************************************************
   * Compléter le code à partir d'ici
  *****************************************************/
+class Produit
+{
+  protected:
+    string nom;
+    string unite;
+  public:
+    Produit(string nom_, string unite_ = ""): nom(nom_), unite(unite_)
+    {}
+    virtual ~Produit(){}
+    string getNom() const { return nom;}
+    string getUnite() const { return unite;}
+    string toString() const { return nom;}
 
+};
+
+class Ingredient
+{
+  protected:
+    double quantite;
+    Produit p;
+  public:
+    Ingredient(const Produit &p_, double quantite_): p(p_), quantite(quantite_)
+    {}
+    const Produit& getProduit() const { return p;}
+    double getQuantite() const { return quantite;}
+    void descriptionAdaptee() const
+    {
+      cout << quantite << p.getUnite() << " de " << p.toString();
+    }
+
+  
+
+};
+
+class Recette
+{
+  protected:
+    unsigned int nb_Fois;
+    string nom;
+    vector<Ingredient> ingredients;
+
+  public:
+    Recette(){}
+    Recette(string nom_, unsigned int n_fois = 1): nom(nom_), nb_Fois(n_fois)
+    {}
+
+    void ajouter(const Produit& p, double quantite)
+    {
+      quantite *= nb_Fois;
+      ingredients.push_back(Ingredient(p, quantite));
+    }
+    Recette adapter(double n)
+    {
+      nb_Fois *= n;
+      return Recette(nom, nb_Fois);
+    }
+
+    void toString() const
+    {
+      cout << "Recette " << nom << " x " << nb_Fois << endl;
+      for (size_t i(0); i < ingredients.size(); i++)
+      {
+        cout << i;
+        ingredients[i].descriptionAdaptee();
+      }
+    }
+
+
+};
+
+class ProduitCuisine: public Produit
+{
+  protected:
+    string nom;
+    string unite;
+    Recette r;
+  public:
+    ProduitCuisine(string nom_, string unite_ = "portion(s)"): Produit(nom_, unite_){}
+
+    void ajouterARecette(const Produit& produit, double quantite)
+    {
+      r.ajouter(produit, quantite);
+    }
+    const ProduitCuisine* adapter(double n)
+    {
+      r.adapter(n);
+      Produit* p = new ProduitCuisine(nom);
+      return p;
+
+    }
+
+
+};
 /*******************************************
  * Ne rien modifier après cette ligne.
  *******************************************/
