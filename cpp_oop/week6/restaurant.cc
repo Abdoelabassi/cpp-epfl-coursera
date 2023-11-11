@@ -46,7 +46,7 @@ class Recette
   protected:
     unsigned int nb_Fois;
     string nom;
-    vector<Ingredient> ingredients;
+    vector<Ingredient*> ingredients;
 
   public:
     Recette(){}
@@ -55,22 +55,29 @@ class Recette
 
     void ajouter(const Produit& p, double quantite)
     {
-      quantite *= nb_Fois;
-      ingredients.push_back(Ingredient(p, quantite));
+      Ingredient* ingre = new Ingredient(this->nom, this->nb_Fois * quantite);
+      ingredients.push_back(ingre);
     }
     Recette adapter(double n)
     {
-      nb_Fois *= n;
-      return Recette(nom, nb_Fois);
+      Recette r(this->nom, this->nb_Fois * n);
+      for (size_t i(0); i < ingredients.size(); i++)
+      {
+        r.ajouter(ingredients[i]->getProduit(), ingredients[i]->getQuantite());
+      }
+
+      return r;
     }
 
-    void toString() const
+    string toString() const
     {
       cout << "Recette " << nom << " x " << nb_Fois << endl;
       for (size_t i(0); i < ingredients.size(); i++)
       {
         cout << i;
-        ingredients[i].descriptionAdaptee();
+        if (i == ingredients.size() - 1 ) ingredients[i]->descriptionAdaptee();
+        else ingredients[i]->descriptionAdaptee();
+        cout << endl;
       }
     }
 
@@ -92,8 +99,15 @@ class ProduitCuisine: public Produit
     }
     const ProduitCuisine* adapter(double n)
     {
-      
+      ProduitCuisine* pc = new ProduitCuisine(nom);
+      pc->r = r.adapter(n);
+      return pc;      
 
+    }
+    void toString() const
+    {
+      Produit p(this->getNom(), this->getUnite());
+      string tostring = p.toString() + "\n" + r.toString(); 
     }
 
 
