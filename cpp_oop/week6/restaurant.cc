@@ -15,26 +15,41 @@ class Produit
   public:
     Produit(string nom_, string unite_ = ""): nom(nom_), unite(unite_)
     {}
-    virtual ~Produit(){}
+    ~Produit(){}
+    virtual const Produit* adapter(double n) const
+    {
+      return this;
+    }
+    virtual double quantiteTotale(const string& nomProduit) const
+    {
+      if(this->getNom() == nomProduit) return 1;
+      else return 0;
+    }
     string getNom() const { return nom;}
     string getUnite() const { return unite;}
-    string toString() const { return nom;}
+    virtual string toString() const { return nom;}
 
 };
 
 class Ingredient
 {
-  protected:
+  private:
+    const Produit& p;
     double quantite;
-    Produit p;
+   
   public:
-    Ingredient(const Produit &p_, double quantite_): p(p_), quantite(quantite_)
+    Ingredient(Produit const& p_, double quantite_): p(p_), quantite(quantite_)
     {}
     const Produit& getProduit() const { return p;}
     double getQuantite() const { return quantite;}
-    void descriptionAdaptee() const
+    string descriptionAdaptee() const
     {
-      cout << quantite << p.getUnite() << " de " << p.toString();
+      string tostring = to_string(quantite) + " " + p.getUnite() + " de " + p.adapter(quantite)->toString();
+      return tostring;
+    }
+    double quantiteTotale(const string& nomProduit) const
+    {
+      return quantite * p.quantiteTotale(nomProduit);
     }
 
   
@@ -43,22 +58,21 @@ class Ingredient
 
 class Recette
 {
-  protected:
-    unsigned int nb_Fois;
+  private:
     string nom;
+    int nb_Fois;
     vector<Ingredient*> ingredients;
 
   public:
-    Recette(){}
-    Recette(string nom_, unsigned int n_fois = 1): nom(nom_), nb_Fois(n_fois)
+    Recette(string nom_, int n_fois = 1): nom(nom_), nb_Fois(n_fois)
     {}
 
     void ajouter(const Produit& p, double quantite)
     {
-      Ingredient* ingre = new Ingredient(this->nom, this->nb_Fois * quantite);
+      Ingredient* ingre = new Ingredient(p, nb_Fois * quantite);
       ingredients.push_back(ingre);
     }
-    Recette adapter(double n)
+    Recette adapter(double n) const
     {
       Recette r(this->nom, this->nb_Fois * n);
       for (size_t i(0); i < ingredients.size(); i++)
@@ -71,14 +85,21 @@ class Recette
 
     string toString() const
     {
-      cout << "Recette " << nom << " x " << nb_Fois << endl;
-      for (size_t i(0); i < ingredients.size(); i++)
+      string tostring;
+      string q = "\"";
+      tostring = "Recette " + q +  nom + q + " x " + to_string(nb_Fois) + ":\n";
+      for (size_t i(0); i < ingredients.size(); ++i)
       {
-        cout << i;
-        if (i == ingredients.size() - 1 ) ingredients[i]->descriptionAdaptee();
-        else ingredients[i]->descriptionAdaptee();
-        cout << endl;
+        if (i == ingredients.size() - 1 ) tostring += to_string(i + 1) + ". " + ingredients[i]->descriptionAdaptee();
+        else tostring += to_string(i + 1) + ". " +  ingredients[i]->descriptionAdaptee() + "\n";
       }
+       return tostring;
+    }
+    virtual double quantiteTotale(const string& nomProduit) const
+    {
+      double sum(0);
+      for (size_t i(0); i < ingredients.size(); i++){ sum += ingredients[i]->quantiteTotale(nomProduit);}
+      return sum;
     }
 
 
@@ -86,28 +107,32 @@ class Recette
 
 class ProduitCuisine: public Produit
 {
-  protected:
-    string nom;
-    string unite;
+  private:
     Recette r;
   public:
-    ProduitCuisine(string nom_, string unite_ = "portion(s)"): Produit(nom_, unite_){}
+    ProduitCuisine(string nom_, string unite_ = "portion(s)"): Produit(nom_, unite_), r(nom_){}
 
     void ajouterARecette(const Produit& produit, double quantite)
     {
       r.ajouter(produit, quantite);
     }
-    const ProduitCuisine* adapter(double n)
+    const ProduitCuisine* adapter(double n) const override
     {
       ProduitCuisine* pc = new ProduitCuisine(nom);
       pc->r = r.adapter(n);
       return pc;      
 
     }
-    void toString() const
+    string toString() const override
     {
       Produit p(this->getNom(), this->getUnite());
-      string tostring = p.toString() + "\n" + r.toString(); 
+      string tostring = p.toString() + "\n" + r.toString();
+      return tostring;
+    }
+    virtual double quantiteTotale(const string& nomProduit) const override
+    {
+      if (this->getNom() == nomProduit) return 1;
+      else return r.quantiteTotale(nomProduit);
     }
 
 
