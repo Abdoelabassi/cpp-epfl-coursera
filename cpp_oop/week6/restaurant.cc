@@ -60,11 +60,11 @@ class Recette
 {
   private:
     string nom;
-    int nbFois_;
+    double nbFois_;
     vector<Ingredient*> ingredients;
 
   public:
-    Recette(string nom_, int n_fois = 1): nom(nom_), nbFois_(n_fois)
+    Recette(string nom_, double n_fois = 1): nom(nom_), nbFois_(n_fois)
     {}
 
     void ajouter(const Produit& p, double quantite)
@@ -74,10 +74,10 @@ class Recette
     }
     Recette adapter(double n) const
     {
-      Recette r(nom, nbFois_ * n);
+      Recette r(this->nom, this->nbFois_ * n);
       for (size_t i(0); i < ingredients.size(); i++)
       {
-        r.ajouter(ingredients[i]->getProduit(), ingredients[i]->getQuantite());
+        r.ajouter(ingredients[i]->getProduit(), ingredients[i]->getQuantite() / nbFois_);
       }
 
       return r;
@@ -86,8 +86,9 @@ class Recette
     string toString() const
     {
       string tostring;
+      int n_fois = (int)nbFois_;
       string q = "\"";
-      tostring = "Recette " + q +  nom + q + " x " + to_string(nbFois_) + ":\n";
+      tostring = "Recette " + q +  nom + q + " x " + to_string(n_fois) + ":\n";
       for (size_t i(0); i < ingredients.size(); ++i)
       {
         if (i == ingredients.size() - 1 ) tostring += to_string(i + 1) + ". " + ingredients[i]->descriptionAdaptee();
@@ -95,9 +96,9 @@ class Recette
       }
        return tostring;
     }
-    virtual double quantiteTotale(const string& nomProduit) const
+    double quantiteTotale(const string& nomProduit) const
     {
-      double sum(0);
+      double sum(0.0);
       for (size_t i(0); i < ingredients.size(); i++){ sum += ingredients[i]->quantiteTotale(nomProduit);}
       return sum;
     }
@@ -116,7 +117,7 @@ class ProduitCuisine: public Produit
     {
       r.ajouter(produit, quantite);
     }
-    const ProduitCuisine* adapter(double n) const override
+    virtual ProduitCuisine* adapter(double n) const override
     {
       ProduitCuisine* pc = new ProduitCuisine(nom);
       pc->r = r.adapter(n);
@@ -157,6 +158,7 @@ int main()
   Produit chocolatNoir("chocolat noir", "grammes");
   Produit amandesMoulues("amandes moulues", "grammes");
   Produit extraitAmandes("extrait d'amandes", "gouttes");
+  
 
   ProduitCuisine glacage("glaçage au chocolat");
   // recette pour une portion de glaçage:
@@ -172,6 +174,8 @@ int main()
   glacageParfume.ajouterARecette(extraitAmandes, 2);
   glacageParfume.ajouterARecette(glacage, 1);
   cout << glacageParfume.toString() << endl;
+
+  
 
   Recette recette("tourte glacée au chocolat");
   recette.ajouter(oeufs, 5);
