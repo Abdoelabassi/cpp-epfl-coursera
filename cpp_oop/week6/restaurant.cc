@@ -49,7 +49,7 @@ class Ingredient
     }
     double quantiteTotale(const string& nomProduit) const
     {
-      return quantite * p.quantiteTotale(nomProduit);
+      return quantite * (p.quantiteTotale(nomProduit));
     }
 
   
@@ -60,21 +60,21 @@ class Recette
 {
   private:
     string nom;
-    int nb_Fois;
+    int nbFois_;
     vector<Ingredient*> ingredients;
 
   public:
-    Recette(string nom_, int n_fois = 1): nom(nom_), nb_Fois(n_fois)
+    Recette(string nom_, int n_fois = 1): nom(nom_), nbFois_(n_fois)
     {}
 
     void ajouter(const Produit& p, double quantite)
     {
-      Ingredient* ingre = new Ingredient(p, nb_Fois * quantite);
+      Ingredient* ingre = new Ingredient(p, quantite * nbFois_);
       ingredients.push_back(ingre);
     }
     Recette adapter(double n) const
     {
-      Recette r(this->nom, this->nb_Fois * n);
+      Recette r(nom, nbFois_ * n);
       for (size_t i(0); i < ingredients.size(); i++)
       {
         r.ajouter(ingredients[i]->getProduit(), ingredients[i]->getQuantite());
@@ -87,7 +87,7 @@ class Recette
     {
       string tostring;
       string q = "\"";
-      tostring = "Recette " + q +  nom + q + " x " + to_string(nb_Fois) + ":\n";
+      tostring = "Recette " + q +  nom + q + " x " + to_string(nbFois_) + ":\n";
       for (size_t i(0); i < ingredients.size(); ++i)
       {
         if (i == ingredients.size() - 1 ) tostring += to_string(i + 1) + ". " + ingredients[i]->descriptionAdaptee();
