@@ -204,5 +204,50 @@ int main()
   cout << "Vérification que le glaçage n'a pas été modifié :\n";
   cout << glacage.toString() << endl;
 
+  // tests
+  Recette re("Biscuit arlquin", 2.5);
+  Produit Noisettes("Noisettes", "cs");
+  Produit chocolat("Chocolat", "grammes");
+  Produit lait("Lait", "tasses");
+  Produit Lait("Lait", "cc");
+  re.ajouter(farine, 11);
+  re.adapter(2);
+  re.ajouter(Noisettes, 12);
+  re.adapter(4);
+  re.ajouter(chocolat, 15);
+  re.adapter(8);
+  re.ajouter(lait, 11);
+  re.adapter(4);
+  re.ajouter(Lait, 14);
+  re.adapter(5);
+  cout << "re.toSttring(): " << re.toString() << endl;
+
+  
+  /*
+  Tests unitaires : 20 points, 4 tests sur 10 passés : 
+	erreur dans "test_recette": Après avoir construit une Recette avec les paramètres (Biscuit arlequin, 2.5 ), puis fait les appels :
+	Recette::ajouter(Produit(Farine, cc), 11)
+	, puis fait l'appel Recette::adapter(2)Recette::ajouter(Produit(Noisettes, cs), 12)
+	, puis fait l'appel Recette::adapter(4)Recette::ajouter(Produit(Chocolat, grammes), 15)
+	, puis fait l'appel Recette::adapter(8)Recette::ajouter(Produit(Lait, tasses), 11)
+	, puis fait l'appel Recette::adapter(4)Recette::ajouter(Produit(Lait, cc), 14)
+	, puis fait l'appel Recette::adapter(5) et appelé la méthode toString sur la Recette retournée.
+	 ERR16: Recette::adapter() (ou toString()) n'est pas correct(e).
+	 J'attendais :
+	«   Recette "Biscuit arlequin" x 12.5:
+	  1. 137.500000 cc de Lait
+	  2. 150.000000 cc de Lait
+	  3. 187.500000 cc de Lait
+	  4. 137.500000 cc de Lait
+	  5. 175.000000 cc de Lait »
+	alors que votre programme a écrit :
+	« Recette "Biscuit arlequin" x 12:
+	1. 137.500000 cc de Lait
+	2. 150.000000 cc de Lait
+	3. 187.500000 cc de Lait
+	4. 137.500000 cc de Lait
+	5. 175.000000 cc de Lait »
+  */
+
   return 0;
 }

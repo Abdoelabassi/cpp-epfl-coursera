@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -Wall -Wextra  --std=c++11 -O3 
+CXXFLAGS := -g -Wall -Wextra  --std=c++11 -O3 
 SRCS := $(wildcard *.cc)
 PROGS := $(patsubst %.cc,%,$(SRCS))
 
