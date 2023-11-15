@@ -32,13 +32,84 @@ class Navire
   /*****************************************************
    * Compléter le code à partir d'ici
    *****************************************************/
+  private:
+    Coordonnees position_;
+    Pavillon pavillion_;
+    Etat eta_;
+  public:
+    Navire(int x_, int y_, Pavillon p): position_(x_, y_), pavillion_(p){}
+
+  Coordonnees position() const
+  {
+    return position_;
+  }
+  void avancer(int de_x, int de_y)
+  {
+    Coordonnees cord(de_x, de_y);
+    if (pavillion_ != Coule)
+    {
+      position_ += cord;
+    }
+  }
+  void renflouer(){eta_ = Intact;}
 
 };
 
 void Coordonnees::operator+=(Coordonnees const& autre)
 {
   // à définir ici
+  x_ += autre.x();
+  y_ += autre.y();
 
+}
+double distance(Coordonnees& cord1, Coordonnees& cord2)
+{
+  double d = sqrt(sq(cord1.x() - cord2.x()) + sq(cord1.y() - cord2.y()));
+  return d;
+}
+
+ostream& operator<<(ostream& affichage, Coordonnees const& autre)
+{
+  affichage << "(" << autre.x() << ", " << autre.y() << ")";
+  return affichage;
+}
+void operator<<(ostream& affichage, Pavillon const& pav)
+{
+  switch (pav)
+  {
+  case JollyRogers:
+    affichage << "pirate";
+    break;
+  case CompagnieDuSenegal;
+    affichage << "français";
+    break;
+  case CompagnieDOstende;
+    affichage << "autrichien";
+    break;
+  
+  default:
+    affichage << "pavillon inconnu";
+    break;
+  }
+}
+void operator<<(ostream& affichage, Etat const& etat)
+{
+  switch (etat)
+  {
+  case Intact:
+    affichage << "intact";
+    break;
+  case Endommage;
+    affichage << "ayant subi des dommages";
+    break;
+  case Coule;
+    affichage << "coulé";
+    break;
+  
+  default:
+    affichage << "état inconnu";
+    break;
+  }
 }
 
 /*******************************************
