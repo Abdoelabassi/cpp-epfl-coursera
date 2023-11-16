@@ -32,26 +32,113 @@ class Navire
   /*****************************************************
    * Compléter le code à partir d'ici
    *****************************************************/
-  private:
+  protected:
     Coordonnees position_;
-    Pavillon pavillion_;
-    Etat eta_;
-  public:
-    Navire(int x_, int y_, Pavillon p): position_(x_, y_), pavillion_(p){}
+    Pavillon  pavillon_;
+    Etat etat_;
+    string nom_generique;
+    const double rayon_rencontre = 10;
 
-  Coordonnees position() const
+  public:
+    Navire(int x_, int y_, Pavillon p, Etat etat = Intact, string nom = ""): position_(x_, y_),  pavillon_(p), etat_(etat), nom_generique(nom) {}
+
+  Coordonnees const& position() const
   {
     return position_;
+  }
+  Etat etat() const
+  {
+    return etat_;
   }
   void avancer(int de_x, int de_y)
   {
     Coordonnees cord(de_x, de_y);
-    if (pavillion_ != Coule)
+    if ( etat_ != Coule)
     {
       position_ += cord;
     }
   }
-  void renflouer(){eta_ = Intact;}
+  void renflouer(){etat_ = Intact;}
+
+  ostream& afficher(ostream& affichage) const;
+  
+  virtual void attaque(Navire& autre)  = 0;
+  virtual void replique(Navire& autre) = 0;
+  virtual void est_touche() = 0;
+  void rencontrer(Navire& autre);
+
+};
+
+class Pirate: public virtual Navire
+{
+  public:
+    Pirate(int x_, int y_, Pavillon p, Etat etat_ = Intact, string nom = "bateau pirate") : Navire(x_, y_, p, etat_, nom){}
+
+  void attaque(Navire& autre)
+  {
+    if (this->etat() != Coule && autre.etat() != Coule)
+    {
+      			cout << "A l'abordage !" << endl;
+            autre.est_touche();
+    }
+  }
+  void replique(Navire& autre)
+  {
+    if (this->etat() != Coule)
+    {
+      	cout << "Non mais, ils nous attaquent ! On riposte !!" << endl;
+        this->attaque(autre);
+
+    }
+  }
+
+  void est_touche(){
+    if (etat_ == Intact) etat_ = Endommage;
+    else etat_ = Coule;
+  }
+};
+
+class Marchand: public virtual Navire
+{
+  public:
+    Marchand(int x_, int y_, Pavillon p, Etat etat = Intact, string nom = "navire marchand"): Navire(x_, y_, p, etat, nom) {}
+  
+  void attaque(Navire& autre)
+	{
+		if (this->etat() != Coule && autre.etat() != Coule) cout << "On vous aura ! (insultes) " << endl;
+	}
+	void replique(Navire& autre)
+	{
+		if (this->etat() == Coule) cout << "SOS je coule !" << endl;
+		else cout << "Même pas peur !" << endl;
+	}
+	void est_touche()
+	{
+		etat_ = Coule;
+	}
+
+  
+
+};
+class Felon: public Marchand, public Pirate
+{
+  public:
+    Felon(int x_, int y_, Pavillon pavillon, Etat etat= Intact, string nom = "navire félon")
+    : Navire(x_, y_, pavillon, etat, nom) ,Marchand(x_, y_, pavillon, etat, nom), Pirate(x_, y_, pavillon, etat, nom){}
+
+  void attaque(Navire& autre)
+	{
+		Pirate::attaque(autre);
+	}
+	void replique(Navire& autre)
+	{
+		Marchand::replique(autre);
+	}
+	void est_touche()
+	{
+		Pirate::est_touche();
+	}
+
 
 };
 
@@ -62,7 +149,7 @@ void Coordonnees::operator+=(Coordonnees const& autre)
   y_ += autre.y();
 
 }
-double distance(Coordonnees& cord1, Coordonnees& cord2)
+double distance(Coordonnees const& cord1, Coordonnees const& cord2)
 {
   double d = sqrt(sq(cord1.x() - cord2.x()) + sq(cord1.y() - cord2.y()));
   return d;
@@ -73,17 +160,17 @@ ostream& operator<<(ostream& affichage, Coordonnees const& autre)
   affichage << "(" << autre.x() << ", " << autre.y() << ")";
   return affichage;
 }
-void operator<<(ostream& affichage, Pavillon const& pav)
+ostream& operator<<(ostream& affichage, Pavillon const& pav)
 {
   switch (pav)
   {
   case JollyRogers:
     affichage << "pirate";
     break;
-  case CompagnieDuSenegal;
+  case CompagnieDuSenegal:
     affichage << "français";
     break;
-  case CompagnieDOstende;
+  case CompagnieDOstende:
     affichage << "autrichien";
     break;
   
@@ -91,18 +178,20 @@ void operator<<(ostream& affichage, Pavillon const& pav)
     affichage << "pavillon inconnu";
     break;
   }
+
+  return affichage;
 }
-void operator<<(ostream& affichage, Etat const& etat)
+ostream& operator<<(ostream& affichage, Etat const& etat)
 {
   switch (etat)
   {
   case Intact:
     affichage << "intact";
     break;
-  case Endommage;
+  case Endommage:
     affichage << "ayant subi des dommages";
     break;
-  case Coule;
+  case Coule:
     affichage << "coulé";
     break;
   
@@ -110,6 +199,32 @@ void operator<<(ostream& affichage, Etat const& etat)
     affichage << "état inconnu";
     break;
   }
+
+  return affichage;
+}
+
+ostream& operator<<(ostream& affichage, Navire const& autre)
+  {
+    return autre.afficher(affichage);
+  }
+
+ostream& Navire::afficher(ostream& affichage) const
+  {
+     affichage << nom_generique << " en " << position_ << " battant pavillon " <<  pavillon_ << ", " << etat_;
+     return affichage;
+  }
+double distance(Navire const& n1, Navire const& n2)
+  {
+    double d = sqrt(sq(n1.position().x() - n2.position().x()) + sq(n1.position().y() - n2.position().y()));
+    return d;
+  }
+  void Navire::rencontrer(Navire& autre)
+{
+	if (distance(*this, autre) < rayon_rencontre && this->etat_ != Coule && autre.etat_ != Coule && this->pavillon_ != autre.pavillon_)
+	{
+		this->attaque(autre);
+		autre.replique(*this);
+	}
 }
 
 /*******************************************
